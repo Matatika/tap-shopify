@@ -1,31 +1,16 @@
 """tap_shopify Authentication."""
 
+from singer_sdk.authenticators import APIKeyAuthenticator, SingletonMeta
 
-from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
-
-
-# The SingletonMeta metaclass makes your streams reuse the same authenticator instance.
-# If this behaviour interferes with your use-case, you can remove the metaclass.
-class tap_shopifyAuthenticator(OAuthAuthenticator, metaclass=SingletonMeta):
+# The SingletonMeta metaclass makes the streams reuse the same authenticator instance.
+class tap_shopifyAuthenticator(APIKeyAuthenticator, metaclass=SingletonMeta):
     """Authenticator class for tap_shopify."""
-
-    @property
-    def oauth_request_body(self) -> dict:
-        """Define the OAuth request body for the tap_shopify API."""
-        # TODO: Define the request body needed for the API.
-        return {
-            'resource': 'https://analysis.windows.net/powerbi/api',
-            'scope': self.oauth_scopes,
-            'client_id': self.config["client_id"],
-            'username': self.config["username"],
-            'password': self.config["password"],
-            'grant_type': 'password',
-        }
 
     @classmethod
     def create_for_stream(cls, stream) -> "tap_shopifyAuthenticator":
         return cls(
             stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
+            key="X-Shopify-Access-Token",
+            value=stream.config["access_token"],
+            location="header",
         )

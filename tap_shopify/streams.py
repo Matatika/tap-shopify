@@ -7,56 +7,60 @@ from singer_sdk import typing as th  # JSON Schema typing helpers
 
 from tap_shopify.client import tap_shopifyStream
 
-# TODO: Delete this is if not using json files for schema definition
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
-# TODO: - Override `UsersStream` and `GroupsStream` with your own stream definition.
-#       - Copy-paste as many times as needed to create multiple stream types.
 
 
-class UsersStream(tap_shopifyStream):
-    """Define custom stream."""
-    name = "users"
-    path = "/users"
+class ProductsStream(tap_shopifyStream):
+    """Products stream."""
+    name = "products"
+    path = "/api/2022-01/products.json"
+    records_jsonpath = "$.products[*]"
     primary_keys = ["id"]
     replication_key = None
-    # Optionally, you may also use `schema_filepath` in place of `schema`:
-    # schema_filepath = SCHEMAS_DIR / "users.json"
     schema = th.PropertiesList(
-        th.Property("name", th.StringType),
         th.Property(
             "id",
-            th.StringType,
-            description="The user's system ID"
-        ),
-        th.Property(
-            "age",
             th.IntegerType,
-            description="The user's age in years"
+            description="The product system ID"
         ),
-        th.Property(
-            "email",
-            th.StringType,
-            description="The user's email address"
-        ),
-        th.Property("street", th.StringType),
-        th.Property("city", th.StringType),
-        th.Property(
-            "state",
-            th.StringType,
-            description="State name in ISO 3166-2 format"
-        ),
-        th.Property("zip", th.StringType),
+        th.Property("title", th.StringType),
+        th.Property("vendor", th.StringType),
+        th.Property("product_type", th.StringType),
+        th.Property("created_at", th.DateTimeType),
+        th.Property("handle", th.StringType),
+        th.Property("updated_at", th.DateTimeType),
+        th.Property("published_at", th.DateTimeType),
+        th.Property("published_scope", th.StringType),
+        th.Property("tags", th.StringType),
     ).to_dict()
 
-
-class GroupsStream(tap_shopifyStream):
-    """Define custom stream."""
-    name = "groups"
-    path = "/groups"
+class OrdersStream(tap_shopifyStream):
+    """Orders stream."""
+    name = "orders"
+    path = "/api/2022-01/orders.json?status=any"
+    records_jsonpath = "$.orders[*]"
     primary_keys = ["id"]
-    replication_key = "modified"
+    replication_key = None
     schema = th.PropertiesList(
-        th.Property("name", th.StringType),
-        th.Property("id", th.StringType),
-        th.Property("modified", th.DateTimeType),
+        th.Property(
+            "id",
+            th.IntegerType,
+            description="The order system ID"
+        ),
+        th.Property("app_id", th.IntegerType),
+        th.Property("browser_ip", th.StringType),
+        th.Property("buyer_accepts_marketing", th.BooleanType),
+        th.Property("cancel_reason", th.StringType),
+        th.Property("cancelled_at", th.DateTimeType),
+        th.Property("cart_token", th.StringType),
+        th.Property("checkout_id", th.IntegerType),
+        th.Property("checkout_token", th.StringType),
+        th.Property("closed_at", th.DateTimeType),
+        th.Property("confirmed", th.BooleanType),
+        th.Property("contact_email", th.StringType),
+        th.Property("created_at", th.DateTimeType),
+        th.Property("currency", th.StringType),
+        th.Property("customer_locale", th.StringType),
+        th.Property("device_id", th.StringType),
     ).to_dict()
+

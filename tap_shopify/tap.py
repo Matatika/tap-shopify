@@ -4,17 +4,16 @@ from typing import List
 
 from singer_sdk import Tap, Stream
 from singer_sdk import typing as th  # JSON schema typing helpers
-# TODO: Import your custom stream types here:
+# Import stream types
 from tap_shopify.streams import (
     tap_shopifyStream,
-    UsersStream,
-    GroupsStream,
+    ProductsStream,
+    OrdersStream,
 )
-# TODO: Compile a list of custom stream types here
-#       OR rewrite discover_streams() below with your custom logic.
+
 STREAM_TYPES = [
-    UsersStream,
-    GroupsStream,
+    ProductsStream,
+    OrdersStream,
 ]
 
 
@@ -22,19 +21,18 @@ class Taptap_shopify(Tap):
     """tap_shopify tap class."""
     name = "tap-shopify"
 
-    # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
+            "access_token",
             th.StringType,
             required=True,
-            description="The token to authenticate against the API service"
+            description="The access token to authenticate with the Shopify API"
         ),
         th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
+            "store",
+            th.StringType,
             required=True,
-            description="Project IDs to replicate"
+            description="Shopify store id, use the prefix of your admin url e.g. https://[your store].myshopify.com/admin"
         ),
         th.Property(
             "start_date",
@@ -42,10 +40,9 @@ class Taptap_shopify(Tap):
             description="The earliest record date to sync"
         ),
         th.Property(
-            "api_url",
+            "admin_url",
             th.StringType,
-            default="https://api.mysample.com",
-            description="The url for the API service"
+            description="The Admin url for your Shopify store (overrides 'store' property)"
         ),
     ).to_dict()
 

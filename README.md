@@ -10,22 +10,51 @@ This Shopify tap produces JSON-formatted data following the Singer spec.
 `tap-shopify` is a Singer tap for the [Shopify REST API](https://shopify.dev/api) built 
 with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
+
 ## Supported Streams
 
-* [Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
-* [Collects](https://shopify.dev/api/admin-rest/2022-01/resources/collect)
-* [Custom Collections](https://shopify.dev/api/admin-rest/2022-01/resources/customcollection)
-* [Customers](https://shopify.dev/api/admin-rest/2022-01/resources/customer)
-* [Inventory Item](https://shopify.dev/api/admin-rest/2022-01/resources/inventoryitem)
-* [Inventory Levels](https://shopify.dev/api/admin-rest/2022-01/resources/inventorylevel)
-* [Locations](https://shopify.dev/api/admin-rest/2022-01/resources/location)
-* [Metafields](https://shopify.dev/api/admin-rest/2022-01/resources/metafield)
 * [Orders](https://shopify.dev/api/admin-rest/2022-01/resources/order)
 * [Products](https://shopify.dev/api/admin-rest/2022-01/resources/product)
-* [Transactions](https://shopify.dev/api/admin-rest/2022-01/resources/transaction)
+
+
+## Roadmap
+
+- [ ] Add support for streams
+[Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
+[Collects](https://shopify.dev/api/admin-rest/2022-01/resources/collect)
+[Custom Collections](https://shopify.dev/api/admin-rest/2022-01/resources/customcollection)
+[Customers](https://shopify.dev/api/admin-rest/2022-01/resources/customer)
+[Inventory Item](https://shopify.dev/api/admin-rest/2022-01/resources/inventoryitem)
+[Inventory Levels](https://shopify.dev/api/admin-rest/2022-01/resources/inventorylevel)
+[Locations](https://shopify.dev/api/admin-rest/2022-01/resources/location)
+[Metafields](https://shopify.dev/api/admin-rest/2022-01/resources/metafield)
+[Transactions](https://shopify.dev/api/admin-rest/2022-01/resources/transaction)
+- [ ] Pagination support w/ tests
+- [ ] Add OAuth support w/ tests
+- [ ] Add admin url override configuration test
+- [ ] Add custom types for IPv4 and tags
+```
+from singer_sdk.helpers._classproperty import classproperty
+from singer_sdk.typing import JSONTypeHelper
+
+class IPv4Type(JSONTypeHelper):
+    @classproperty
+    def type_dict(cls) -> dict:
+        return {
+            "type": ["string"],
+            "format": ["ipv4"],
+        }
+```
+- [ ] Fix failing test_core.py::test_standard_tap_tests
+```
+404 Client Error: Not Found for path: /api/2022-01/orders.json
+```
+- [ ] CI setup
+
 
 
 ## Installation
+
 Use pip to install a release from GitHub
 
 ```bash
@@ -36,8 +65,7 @@ pip install git+https://github.com/Matatika/tap-shopify@vx.x.x
 
 ### Accepted Config Options
 
-A full list of supported settings and capabilities for this
-tap is available by running:
+A full list of supported settings and capabilities for this tap is available by running:
 
 ```bash
 tap-shopify --about
@@ -45,7 +73,22 @@ tap-shopify --about
 
 ### Source Authentication and Authorization
 
-- [ ] `Developer TODO:` If your tap requires special access on the source system, or any special authentication requirements, provide those here.
+To read data from your store, you need a Shopify access token.
+
+For a single store, Shopify recommends you create a [Custom App](https://help.shopify.com/en/manual/apps/custom-apps)
+
+1. Log in to your Shopify store admin at https://<store>.myshopify.com/admin
+
+2. Click “Apps” in the menu
+
+3. Click “Develop apps for your store” in the "Build custom apps for your unique needs" section
+
+4. Click the “Create an app” button and give you app a name.
+
+5. Next you need to "Configure Admin API scopes" with read access to all resources you require. e.g. `read_locales,read_products,read_orders,read_locations,read_inventory,read_fulfillments,read_customers,`
+
+6. Finally, in "API credentials" tab, click "Install app" button.  Copy the *Admin API access token*
+
 
 ## Usage
 
@@ -60,8 +103,6 @@ tap-shopify --config CONFIG --discover > ./catalog.json
 ```
 
 ## Developer Resources
-
-- [ ] `Developer TODO:` As a first step, scan the entire project for the text "`TODO:`" and complete any recommended steps, deleting the "TODO" references once completed.
 
 ### Initialize your Development Environment
 

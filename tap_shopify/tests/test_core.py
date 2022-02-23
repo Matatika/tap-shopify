@@ -7,10 +7,10 @@ from singer_sdk.testing import get_standard_tap_tests
 from tap_shopify.tap import Taptap_shopify
 
 SAMPLE_CONFIG = {
+    "access_token": "mock-token",
+    "store": "mock-store",
     "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
-    # TODO: Initialize minimal tap config
 }
-
 
 # Run standard built-in tap tests from the SDK:
 def test_standard_tap_tests():
