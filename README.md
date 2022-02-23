@@ -5,7 +5,7 @@ This Shopify tap produces JSON-formatted data following the Singer spec.
 [![test](https://github.com/matatika/tap-shopify/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/matatika/tap-shopify/actions/workflows/ci_workflow.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License](https://img.shields.io/github/license/matatika/tap-shopify)](LICENSE.md)
-[![Python](https://img.shields.io/static/v1?logo=python&label=python&message=3.8%20|%203.9%20|%203.10&color=blue)]()
+[![Python](https://img.shields.io/static/v1?logo=python&label=python&message=3.7%20|%203.8%20|%203.9&color=blue)]()
 
 `tap-shopify` is a Singer tap for the [Shopify REST API](https://shopify.dev/api) built 
 with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
