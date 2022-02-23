@@ -32,19 +32,6 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 - [ ] Pagination support w/ tests
 - [ ] Add OAuth support w/ tests
 - [ ] Add admin url override configuration test
-- [ ] Add custom types for IPv4 and tags
-```
-from singer_sdk.helpers._classproperty import classproperty
-from singer_sdk.typing import JSONTypeHelper
-
-class IPv4Type(JSONTypeHelper):
-    @classproperty
-    def type_dict(cls) -> dict:
-        return {
-            "type": ["string"],
-            "format": ["ipv4"],
-        }
-```
 - [ ] Fix failing test_core.py::test_standard_tap_tests
 ```
 404 Client Error: Not Found for path: /api/2022-01/orders.json

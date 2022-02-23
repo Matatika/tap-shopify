@@ -4,11 +4,29 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Union, List, Iterable
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
+from singer_sdk.helpers._classproperty import classproperty
+from singer_sdk.typing import JSONTypeHelper
 
 from tap_shopify.client import tap_shopifyStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
+class IPv4Type(JSONTypeHelper):
+    @classproperty
+    def type_dict(cls) -> dict:
+        return {
+            "type": ["string"],
+            "format": ["ipv4"],
+        }
+
+class CurrencyAmount(JSONTypeHelper):
+    @classproperty
+    def type_dict(cls) -> dict:
+        return {
+            "type": ["string"],
+            "pattern": ["^(0|([1-9]+[0-9]*))(\.[0-9]{1,2})?$"],
+            "minLength": 1,
+        }
 
 class ProductsStream(tap_shopifyStream):
     """Products stream."""
@@ -48,7 +66,7 @@ class OrdersStream(tap_shopifyStream):
             description="The order system ID"
         ),
         th.Property("app_id", th.IntegerType),
-        th.Property("browser_ip", th.StringType),
+        th.Property("browser_ip", IPv4Type),
         th.Property("buyer_accepts_marketing", th.BooleanType),
         th.Property("cancel_reason", th.StringType),
         th.Property("cancelled_at", th.DateTimeType),
@@ -62,5 +80,6 @@ class OrdersStream(tap_shopifyStream):
         th.Property("currency", th.StringType),
         th.Property("customer_locale", th.StringType),
         th.Property("device_id", th.StringType),
+        th.Property("total_price", CurrencyAmount),
     ).to_dict()
 
