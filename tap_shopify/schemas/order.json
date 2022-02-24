@@ -73,6 +73,7 @@
       "type": "string"
     },
     "created_at": {
+      "format": "date-time",
       "type": "string"
     },
     "currency": {
@@ -652,10 +653,10 @@
           "type": "null"
         },
         "latitude": {
-          "type": "number"
+          "type": ["null", "number"]
         },
         "longitude": {
-          "type": "number"
+          "type": ["null", "number"]
         },
         "name": {
           "type": "string"
