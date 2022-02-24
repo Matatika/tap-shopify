@@ -24,7 +24,7 @@
       "type": "null"
     },
     "cart_token": {
-      "type": "null"
+      "type": ["null", "string"]
     },
     "checkout_id": {
       "type": "integer"
