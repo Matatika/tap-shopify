@@ -37,6 +37,7 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 404 Client Error: Not Found for path: /api/2022-01/orders.json
 ```
 - [ ] CI setup, fix lint and tests.
+- [ ] Update schema format for 'date-time' fields and 'singer.decimal'
 
 
 
