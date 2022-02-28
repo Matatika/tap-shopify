@@ -28,10 +28,14 @@ class tap_shopifyStream(RESTStream):
     next_page_token_jsonpath = "$.next_page"  # Or override `get_next_page_token`.
 
     @property
-    @cached
-    def authenticator(self) -> tap_shopifyAuthenticator:
+    def authenticator(self):
         """Return a new authenticator object."""
-        return tap_shopifyAuthenticator.create_for_stream(self)
+        return tap_shopifyAuthenticator(
+            self,
+            key="X-Shopify-Access-Token",
+            value=self.config["access_token"],
+            location="header",
+        )
 
     @property
     def http_headers(self) -> dict:
