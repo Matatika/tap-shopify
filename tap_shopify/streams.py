@@ -1,9 +1,7 @@
 """Stream type classes for tap-shopify."""
 
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Union
 
-from singer_sdk import typing as th  # JSON Schema typing helpers
 from singer_sdk.helpers._classproperty import classproperty
 from singer_sdk.typing import JSONTypeHelper
 

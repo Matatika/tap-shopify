@@ -1,7 +1,7 @@
 """REST client handling, including tap_shopifyStream base class."""
 
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, Dict, Iterable, Optional
 
 import requests
 from memoization import cached

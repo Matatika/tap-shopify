@@ -6,7 +6,7 @@ from singer_sdk import Stream, Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 # Import stream types
-from tap_shopify.streams import OrdersStream, ProductsStream, tap_shopifyStream
+from tap_shopify.streams import OrdersStream, ProductsStream
 
 STREAM_TYPES = [
     ProductsStream,
@@ -30,7 +30,8 @@ class Taptap_shopify(Tap):
             "store",
             th.StringType,
             required=True,
-            description="Shopify store id, use the prefix of your admin url e.g. https://[your store].myshopify.com/admin",
+            description=("Shopify store id, use the prefix of your admin url "
+                         + "e.g. https://[your store].myshopify.com/admin"),
         ),
         th.Property(
             "start_date",
@@ -40,7 +41,8 @@ class Taptap_shopify(Tap):
         th.Property(
             "admin_url",
             th.StringType,
-            description="The Admin url for your Shopify store (overrides 'store' property)",
+            description=("The Admin url for your Shopify store "
+                         + "(overrides 'store' property)"),
         ),
     ).to_dict()
 
