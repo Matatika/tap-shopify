@@ -11,8 +11,9 @@ from tap_shopify.tap import Taptap_shopify
 SAMPLE_CONFIG = {
     "access_token": "mock-token",
     "store": "mock-store",
-    "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+    "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
 }
+
 
 class TestCore(unittest.TestCase):
     """Test class for core tap tests"""
@@ -39,10 +40,7 @@ class TestCore(unittest.TestCase):
             status=200,
         )
         # when run standard tests
-        tests = get_standard_tap_tests(
-            Taptap_shopify,
-            config=SAMPLE_CONFIG
-        )
+        tests = get_standard_tap_tests(Taptap_shopify, config=SAMPLE_CONFIG)
         # expect no failures
         for test in tests:
             test()

@@ -4,6 +4,7 @@ from typing import List
 
 from singer_sdk import Tap, Stream
 from singer_sdk import typing as th  # JSON schema typing helpers
+
 # Import stream types
 from tap_shopify.streams import (
     tap_shopifyStream,
@@ -19,6 +20,7 @@ STREAM_TYPES = [
 
 class Taptap_shopify(Tap):
     """tap_shopify tap class."""
+
     name = "tap-shopify"
 
     config_jsonschema = th.PropertiesList(
@@ -26,23 +28,23 @@ class Taptap_shopify(Tap):
             "access_token",
             th.StringType,
             required=True,
-            description="The access token to authenticate with the Shopify API"
+            description="The access token to authenticate with the Shopify API",
         ),
         th.Property(
             "store",
             th.StringType,
             required=True,
-            description="Shopify store id, use the prefix of your admin url e.g. https://[your store].myshopify.com/admin"
+            description="Shopify store id, use the prefix of your admin url e.g. https://[your store].myshopify.com/admin",
         ),
         th.Property(
             "start_date",
             th.DateTimeType,
-            description="The earliest record date to sync"
+            description="The earliest record date to sync",
         ),
         th.Property(
             "admin_url",
             th.StringType,
-            description="The Admin url for your Shopify store (overrides 'store' property)"
+            description="The Admin url for your Shopify store (overrides 'store' property)",
         ),
     ).to_dict()
 

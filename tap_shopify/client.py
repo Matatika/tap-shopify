@@ -21,7 +21,9 @@ class tap_shopifyStream(RESTStream):
     @property
     def url_base(self) -> str:
         """Return the API URL root, configurable via tap settings."""
-        url_base = self.config.get("admin_url") or 'https://%s.myshopify.com/admin' % self.config.get("store")
+        url_base = self.config.get(
+            "admin_url"
+        ) or "https://%s.myshopify.com/admin" % self.config.get("store")
         return url_base
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.

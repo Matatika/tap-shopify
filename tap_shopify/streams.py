@@ -11,6 +11,7 @@ from tap_shopify.client import tap_shopifyStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
+
 class IPv4Type(JSONTypeHelper):
     @classproperty
     def type_dict(cls) -> dict:
@@ -19,8 +20,10 @@ class IPv4Type(JSONTypeHelper):
             "format": ["ipv4"],
         }
 
+
 class ProductsStream(tap_shopifyStream):
     """Products stream."""
+
     name = "products"
     path = "/api/2022-01/products.json"
     records_jsonpath = "$.products[*]"
@@ -28,12 +31,13 @@ class ProductsStream(tap_shopifyStream):
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "product.json"
 
+
 class OrdersStream(tap_shopifyStream):
     """Orders stream."""
+
     name = "orders"
     path = "/api/2022-01/orders.json?status=any"
     records_jsonpath = "$.orders[*]"
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "order.json"
-
