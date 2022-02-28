@@ -9,6 +9,7 @@ class tap_shopifyAuthenticator(APIKeyAuthenticator, metaclass=SingletonMeta):
 
     @classmethod
     def create_for_stream(cls, stream) -> "tap_shopifyAuthenticator":
+        """Create Authtenticator for supplied Stream."""
         return cls(
             stream=stream,
             key="X-Shopify-Access-Token",

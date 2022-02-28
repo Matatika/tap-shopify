@@ -11,8 +11,11 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
 class IPv4Type(JSONTypeHelper):
+    """Class for IPv4 type."""
+
     @classproperty
     def type_dict(cls) -> dict:
+        """Define and return the type information."""
         return {
             "type": ["string"],
             "format": ["ipv4"],
