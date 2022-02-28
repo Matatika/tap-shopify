@@ -30,8 +30,10 @@ class Taptap_shopify(Tap):
             "store",
             th.StringType,
             required=True,
-            description=("Shopify store id, use the prefix of your admin url "
-                         + "e.g. https://[your store].myshopify.com/admin"),
+            description=(
+                "Shopify store id, use the prefix of your admin url "
+                + "e.g. https://[your store].myshopify.com/admin"
+            ),
         ),
         th.Property(
             "start_date",
@@ -41,8 +43,9 @@ class Taptap_shopify(Tap):
         th.Property(
             "admin_url",
             th.StringType,
-            description=("The Admin url for your Shopify store "
-                         + "(overrides 'store' property)"),
+            description=(
+                "The Admin url for your Shopify store " + "(overrides 'store' property)"
+            ),
         ),
     ).to_dict()
 
