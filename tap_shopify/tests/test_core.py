@@ -1,9 +1,9 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
-import unittest
 import datetime
-import responses
+import unittest
 
+import responses
 from singer_sdk.testing import get_standard_tap_tests
 
 from tap_shopify.tap import Taptap_shopify

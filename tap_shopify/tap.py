@@ -2,15 +2,11 @@
 
 from typing import List
 
-from singer_sdk import Tap, Stream
+from singer_sdk import Stream, Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 # Import stream types
-from tap_shopify.streams import (
-    tap_shopifyStream,
-    ProductsStream,
-    OrdersStream,
-)
+from tap_shopify.streams import OrdersStream, ProductsStream, tap_shopifyStream
 
 STREAM_TYPES = [
     ProductsStream,
