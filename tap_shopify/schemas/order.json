@@ -341,7 +341,7 @@
       "type": "null"
     },
     "subtotal_price": {
-      "type": "string"
+      "type": "number"
     },
     "subtotal_price_set": {
       "type": "object",
@@ -485,7 +485,9 @@
       "type": "string"
     },
     "total_price": {
-      "type": "string"
+      "type": "number",
+      "minimum": 0,
+      "multipleOf": 0.01
     },
     "total_price_set": {
       "type": "object",

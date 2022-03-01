@@ -6,6 +6,8 @@ from singer_sdk.helpers._classproperty import classproperty
 from singer_sdk.typing import JSONTypeHelper
 
 from tap_shopify.client import tap_shopifyStream
+from typing import Optional
+from decimal import Decimal
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
@@ -42,3 +44,10 @@ class OrdersStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "order.json"
+    
+    def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
+        super().post_process(row, context)
+        row["subtotal_price"] = Decimal(row["subtotal_price"])
+        row["total_price"] = Decimal(row["total_price"])
+        return row
+    
