@@ -18,16 +18,19 @@
       "type": "string"
     },
     "created_at": {
-      "type": "string"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "handle": {
       "type": "string"
     },
     "updated_at": {
-      "type": "string"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "published_at": {
-      "type": "string"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "template_suffix": {
       "type": "string"
@@ -89,7 +92,8 @@
             "type": "null"
           },
           "created_at": {
-            "type": "string"
+            "format": "date-time",
+            "type": ["null", "string"]
           },
           "updated_at": {
             "type": "string"
@@ -206,10 +210,12 @@
             "type": "integer"
           },
           "created_at": {
-            "type": "string"
+            "format": "date-time",
+            "type": ["null", "string"]
           },
           "updated_at": {
-            "type": "string"
+            "format": "date-time",
+            "type": ["null", "string"]
           },
           "alt": {
             "type": "null"
@@ -258,10 +264,12 @@
           "type": "integer"
         },
         "created_at": {
-          "type": "string"
+          "format": "date-time",
+          "type": ["null", "string"]
         },
         "updated_at": {
-          "type": "string"
+          "format": "date-time",
+          "type": ["null", "string"]
         },
         "alt": {
           "type": "null"

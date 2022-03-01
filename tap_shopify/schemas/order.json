@@ -21,7 +21,8 @@
       "type": "null"
     },
     "cancelled_at": {
-      "type": "null"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "cart_token": {
       "type": ["null", "string"]
@@ -64,7 +65,8 @@
       ]
     },
     "closed_at": {
-      "type": "null"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "confirmed": {
       "type": "boolean"
@@ -74,7 +76,7 @@
     },
     "created_at": {
       "format": "date-time",
-      "type": "string"
+      "type": ["null", "string"]
     },
     "currency": {
       "type": "string"
@@ -317,7 +319,8 @@
       "type": "string"
     },
     "processed_at": {
-      "type": "string"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "processing_method": {
       "type": "string"
@@ -614,7 +617,8 @@
       "type": "integer"
     },
     "updated_at": {
-      "type": "string"
+      "format": "date-time",
+      "type": ["null", "string"]
     },
     "user_id": {
       "type": "null"
