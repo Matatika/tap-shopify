@@ -44,10 +44,9 @@ class OrdersStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "order.json"
-    
+
     def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
         super().post_process(row, context)
         row["subtotal_price"] = Decimal(row["subtotal_price"])
         row["total_price"] = Decimal(row["total_price"])
         return row
-    
