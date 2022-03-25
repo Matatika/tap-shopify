@@ -74,22 +74,22 @@
             "type": "string"
           },
           "compare_at_price": {
-            "type": "null"
+            "type": ["string", "null"]
           },
           "fulfillment_service": {
             "type": "string"
           },
           "inventory_management": {
-            "type": "null"
+            "type": ["string", "null"]
           },
           "option1": {
             "type": "string"
           },
           "option2": {
-            "type": "null"
+            "type": ["string", "null"]
           },
           "option3": {
-            "type": "null"
+            "type": ["string", "null"]
           },
           "created_at": {
             "format": "date-time",
@@ -108,7 +108,7 @@
             "type": "integer"
           },
           "image_id": {
-            "type": "null"
+            "type": ["string", "null"]
           },
           "weight": {
             "type": "number"
@@ -218,7 +218,7 @@
             "type": ["null", "string"]
           },
           "alt": {
-            "type": "null"
+            "type": ["string", "null"]
           },
           "width": {
             "type": "integer"
@@ -272,7 +272,7 @@
           "type": ["null", "string"]
         },
         "alt": {
-          "type": "null"
+          "type": ["string", "null"]
         },
         "width": {
           "type": "integer"
