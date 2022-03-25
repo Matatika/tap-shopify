@@ -15,6 +15,7 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 * [Orders](https://shopify.dev/api/admin-rest/2022-01/resources/order)
 * [Products](https://shopify.dev/api/admin-rest/2022-01/resources/product)
+* [Customers](https://shopify.dev/api/admin-rest/2022-01/resources/customer)
 
 
 ## Roadmap
@@ -23,7 +24,6 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 [Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
 [Collects](https://shopify.dev/api/admin-rest/2022-01/resources/collect)
 [Custom Collections](https://shopify.dev/api/admin-rest/2022-01/resources/customcollection)
-[Customers](https://shopify.dev/api/admin-rest/2022-01/resources/customer)
 [Inventory Item](https://shopify.dev/api/admin-rest/2022-01/resources/inventoryitem)
 [Inventory Levels](https://shopify.dev/api/admin-rest/2022-01/resources/inventorylevel)
 [Locations](https://shopify.dev/api/admin-rest/2022-01/resources/location)

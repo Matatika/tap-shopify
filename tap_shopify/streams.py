@@ -24,6 +24,17 @@ class IPv4Type(JSONTypeHelper):
         }
 
 
+class CustomersStream(tap_shopifyStream):
+    """Users stream."""
+
+    name = "customers"
+    path = "/api/2022-01/customers.json"
+    records_jsonpath = "$.customers[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "customer.json"
+
+
 class ProductsStream(tap_shopifyStream):
     """Products stream."""
 

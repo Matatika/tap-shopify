@@ -6,9 +6,10 @@ from singer_sdk import Stream, Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 # Import stream types
-from tap_shopify.streams import OrdersStream, ProductsStream
+from tap_shopify.streams import CustomersStream, OrdersStream, ProductsStream
 
 STREAM_TYPES = [
+    CustomersStream,
     ProductsStream,
     OrdersStream,
 ]
