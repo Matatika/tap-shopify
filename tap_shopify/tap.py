@@ -21,7 +21,7 @@ STREAM_TYPES = [
 ]
 
 
-class Taptap_shopify(Tap):
+class Tap_Shopify(Tap):
     """tap_shopify tap class."""
 
     name = "tap-shopify"

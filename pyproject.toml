@@ -40,4 +40,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 # CLI declaration
-tap-shopify = 'tap_shopify.tap:Taptap_shopify.cli'
+tap-shopify = 'tap_shopify.tap:Tap_Shopify.cli'

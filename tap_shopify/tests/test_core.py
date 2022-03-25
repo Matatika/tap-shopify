@@ -6,7 +6,7 @@ import unittest
 import responses
 from singer_sdk.testing import get_standard_tap_tests
 
-from tap_shopify.tap import Taptap_shopify
+from tap_shopify.tap import Tap_Shopify
 
 SAMPLE_CONFIG = {
     "access_token": "mock-token",
@@ -52,7 +52,7 @@ class TestCore(unittest.TestCase):
             status=200,
         )
         # when run standard tests
-        tests = get_standard_tap_tests(Taptap_shopify, config=SAMPLE_CONFIG)
+        tests = get_standard_tap_tests(Tap_Shopify, config=SAMPLE_CONFIG)
         # expect no failures
         for test in tests:
             test()
