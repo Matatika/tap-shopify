@@ -23,6 +23,7 @@ class IPv4Type(JSONTypeHelper):
             "format": ["ipv4"],
         }
 
+
 class CustomersStream(tap_shopifyStream):
     """Users stream."""
 
