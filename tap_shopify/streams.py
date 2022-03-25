@@ -25,7 +25,7 @@ class IPv4Type(JSONTypeHelper):
 
 
 class CustomersStream(tap_shopifyStream):
-    """Users stream."""
+    """Customers stream."""
 
     name = "customers"
     path = "/api/2022-01/customers.json"
@@ -35,15 +35,15 @@ class CustomersStream(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "customer.json"
 
 
-class ProductsStream(tap_shopifyStream):
-    """Products stream."""
+class LocationsStream(tap_shopifyStream):
+    """Locations stream."""
 
-    name = "products"
-    path = "/api/2022-01/products.json"
-    records_jsonpath = "$.products[*]"
+    name = "locations"
+    path = "/api/2022-01/locations.json"
+    records_jsonpath = "$.locations[*]"
     primary_keys = ["id"]
     replication_key = None
-    schema_filepath = SCHEMAS_DIR / "product.json"
+    schema_filepath = SCHEMAS_DIR / "location.json"
 
 
 class OrdersStream(tap_shopifyStream):
@@ -62,3 +62,14 @@ class OrdersStream(tap_shopifyStream):
         row["subtotal_price"] = Decimal(row["subtotal_price"])
         row["total_price"] = Decimal(row["total_price"])
         return row
+
+
+class ProductsStream(tap_shopifyStream):
+    """Products stream."""
+
+    name = "products"
+    path = "/api/2022-01/products.json"
+    records_jsonpath = "$.products[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "product.json"
