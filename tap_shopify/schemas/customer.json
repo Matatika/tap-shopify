@@ -1,0 +1,233 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "email": {
+            "type": "string"
+        },
+        "accepts_marketing": {
+            "type": "boolean"
+        },
+        "created_at": {
+            "type": "string"
+        },
+        "updated_at": {
+            "type": "string"
+        },
+        "first_name": {
+            "type": "string"
+        },
+        "last_name": {
+            "type": "string"
+        },
+        "orders_count": {
+            "type": "integer"
+        },
+        "state": {
+            "type": "string"
+        },
+        "total_spent": {
+            "type": "string"
+        },
+        "last_order_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "note": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "verified_email": {
+            "type": "boolean"
+        },
+        "multipass_identifier": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "tax_exempt": {
+            "type": "boolean"
+        },
+        "phone": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "tags": {
+            "type": "string"
+        },
+        "last_order_name": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "currency": {
+            "type": "string"
+        },
+        "addresses": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "customer_id": {
+                        "type": "integer"
+                    },
+                    "first_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "last_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "company": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "address1": {
+                        "type": "string"
+                    },
+                    "address2": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "province": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "zip": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "province_code": {
+                        "type": "string"
+                    },
+                    "country_code": {
+                        "type": "string"
+                    },
+                    "country_name": {
+                        "type": "string"
+                    },
+                    "default": {
+                        "type": "boolean"
+                    }
+                }
+            }
+        },
+        "accepts_marketing_updated_at": {
+            "type": "string"
+        },
+        "marketing_opt_in_level": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "tax_exemptions": {
+            "type": "array",
+            "items": {}
+        },
+        "admin_graphql_api_id": {
+            "type": "string"
+        },
+        "default_address": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "customer_id": {
+                    "type": "integer"
+                },
+                "first_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "last_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "company": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "address1": {
+                    "type": "string"
+                },
+                "address2": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "province": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "zip": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "province_code": {
+                    "type": "string"
+                },
+                "country_code": {
+                    "type": "string"
+                },
+                "country_name": {
+                    "type": "string"
+                },
+                "default": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
