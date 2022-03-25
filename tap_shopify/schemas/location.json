@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "active": {
+            "type": "boolean"
+        },
+        "address1": {
+            "type": "string"
+        },
+        "address2": {
+            "type": ["string", "null"]
+        },
+        "city": {
+            "type": "string"
+        },
+        "country": {
+            "type": "string"
+        },
+        "country_code": {
+            "type": "string"
+        },
+        "created_at": {
+            "type": "string"
+        },
+        "id": {
+            "type": "number"
+        },
+        "legacy": {
+            "type": "boolean"
+        },
+        "name": {
+            "type": "string"
+        },
+        "phone": {
+            "type": "string"
+        },
+        "province": {
+            "type": "string"
+        },
+        "province_code": {
+            "type": "string"
+        },
+        "updated_at": {
+            "type": "string"
+        },
+        "zip": {
+            "type": "string"
+        },
+        "localized_country_name": {
+            "type": "string"
+        },
+        "localized_province_name": {
+            "type": "string"
+        }
+    }
+}
