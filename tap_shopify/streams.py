@@ -104,6 +104,9 @@ class OrdersStream(tap_shopifyStream):
         row["subtotal_price"] = Decimal(row["subtotal_price"])
         row["total_price"] = Decimal(row["total_price"])
         return row
+    
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        return {"order_id": record["id"]}
 
 
 class ProductsStream(tap_shopifyStream):
@@ -115,3 +118,16 @@ class ProductsStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "product.json"
+
+
+class TransactionsStream(tap_shopifyStream):
+    """Transactions stream"""
+
+    parent_stream_type = OrdersStream
+
+    name = "transactions"
+    path = "/api/2022-01/orders/{order_id}/transactions.json"
+    records_jsonpath = "$.transactions[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "transaction.json"
