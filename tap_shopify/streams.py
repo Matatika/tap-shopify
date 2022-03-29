@@ -77,6 +77,17 @@ class LocationsStream(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "location.json"
 
 
+class MetafieldsStream(tap_shopifyStream):
+    """Metafields stream."""
+
+    name = "metafields"
+    path = "/api/2022-01/metafields.json"
+    records_jsonpath = "$.metafields[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "metafield.json"
+
+
 class OrdersStream(tap_shopifyStream):
     """Orders stream."""
 

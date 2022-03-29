@@ -69,6 +69,12 @@ class TestCore(unittest.TestCase):
             json={},
             status=200,
         )
+        responses.add(
+            responses.GET,
+            "https://mock-store.myshopify.com/admin/api/2022-01/metafields.json",
+            json={},
+            status=200,
+        )
 
         # when run standard tests
         tests = get_standard_tap_tests(Tap_Shopify, config=SAMPLE_CONFIG)
