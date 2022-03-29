@@ -34,6 +34,17 @@ class AbandondedCheckouts(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "checkout.json"
 
 
+class CustomCollections(tap_shopifyStream):
+    """Custom collections stream."""
+
+    name = "custom_collections"
+    path = "/api/2022-01/custom_collections.json"
+    records_jsonpath = "$.custom_collections[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "custom_collection.json"
+
+
 class CollectStream(tap_shopifyStream):
     """Collect stream."""
 
