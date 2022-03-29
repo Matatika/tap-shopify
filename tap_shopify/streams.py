@@ -23,6 +23,26 @@ class IPv4Type(JSONTypeHelper):
             "format": ["ipv4"],
         }
 
+class AbandondedCheckouts(tap_shopifyStream):
+    """Abandonded checkouts stream."""
+
+    name = "abandonded_checkouts"
+    path = "/api/2022-01/checkouts.json"
+    records_jsonpath = "$.checkouts[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "checkout.json"
+
+
+class CollectStream(tap_shopifyStream):
+    """Collect stream."""
+
+    name = "collects"
+    path = "/api/2022-01/collects.json"
+    records_jsonpath = "$.collects[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "collect.json"
 
 class CustomersStream(tap_shopifyStream):
     """Customers stream."""
