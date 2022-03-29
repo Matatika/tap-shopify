@@ -23,6 +23,7 @@ class IPv4Type(JSONTypeHelper):
             "format": ["ipv4"],
         }
 
+
 class AbandondedCheckouts(tap_shopifyStream):
     """Abandonded checkouts stream."""
 
@@ -54,6 +55,7 @@ class CollectStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "collect.json"
+
 
 class CustomersStream(tap_shopifyStream):
     """Customers stream."""
@@ -104,7 +106,7 @@ class OrdersStream(tap_shopifyStream):
         row["subtotal_price"] = Decimal(row["subtotal_price"])
         row["total_price"] = Decimal(row["total_price"])
         return row
-    
+
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         return {"order_id": record["id"]}
 
