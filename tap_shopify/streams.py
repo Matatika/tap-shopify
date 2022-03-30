@@ -24,6 +24,39 @@ class IPv4Type(JSONTypeHelper):
         }
 
 
+class AbandondedCheckouts(tap_shopifyStream):
+    """Abandonded checkouts stream."""
+
+    name = "abandonded_checkouts"
+    path = "/api/2022-01/checkouts.json"
+    records_jsonpath = "$.checkouts[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "checkout.json"
+
+
+class CustomCollections(tap_shopifyStream):
+    """Custom collections stream."""
+
+    name = "custom_collections"
+    path = "/api/2022-01/custom_collections.json"
+    records_jsonpath = "$.custom_collections[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "custom_collection.json"
+
+
+class CollectStream(tap_shopifyStream):
+    """Collect stream."""
+
+    name = "collects"
+    path = "/api/2022-01/collects.json"
+    records_jsonpath = "$.collects[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "collect.json"
+
+
 class CustomersStream(tap_shopifyStream):
     """Customers stream."""
 
@@ -46,6 +79,17 @@ class LocationsStream(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "location.json"
 
 
+class MetafieldsStream(tap_shopifyStream):
+    """Metafields stream."""
+
+    name = "metafields"
+    path = "/api/2022-01/metafields.json"
+    records_jsonpath = "$.metafields[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "metafield.json"
+
+
 class OrdersStream(tap_shopifyStream):
     """Orders stream."""
 
@@ -63,6 +107,10 @@ class OrdersStream(tap_shopifyStream):
         row["total_price"] = Decimal(row["total_price"])
         return row
 
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"order_id": record["id"]}
+
 
 class ProductsStream(tap_shopifyStream):
     """Products stream."""
@@ -73,3 +121,16 @@ class ProductsStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "product.json"
+
+
+class TransactionsStream(tap_shopifyStream):
+    """Transactions stream."""
+
+    parent_stream_type = OrdersStream
+
+    name = "transactions"
+    path = "/api/2022-01/orders/{order_id}/transactions.json"
+    records_jsonpath = "$.transactions[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "transaction.json"
