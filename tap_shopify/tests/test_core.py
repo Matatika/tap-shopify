@@ -65,8 +65,8 @@ class TestCore(unittest.TestCase):
         )
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/" + 
-            "admin/api/2022-01/custom_collections.json",
+            "https://mock-store.myshopify.com/"
+            + "admin/api/2022-01/custom_collections.json",
             json={},
             status=200,
         )
