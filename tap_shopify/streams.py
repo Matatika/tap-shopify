@@ -108,6 +108,7 @@ class OrdersStream(tap_shopifyStream):
         return row
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
         return {"order_id": record["id"]}
 
 
@@ -123,7 +124,7 @@ class ProductsStream(tap_shopifyStream):
 
 
 class TransactionsStream(tap_shopifyStream):
-    """Transactions stream"""
+    """Transactions stream."""
 
     parent_stream_type = OrdersStream
 
