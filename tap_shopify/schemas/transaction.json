@@ -18,10 +18,16 @@
             "type": "string"
         },
         "device_id": {
-            "type": ["integer", "null"]
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "error_code": {
-            "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "extended_authorization_attributes": {
             "type": "object",
@@ -44,9 +50,13 @@
             "type": "string"
         },
         "location_id": {
+            "type": "object",
             "properties": {
                 "id": {
-                    "type": ["integer", "null"]
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 }
             }
         },
@@ -60,13 +70,19 @@
             "type": "object",
             "properties": {
                 "avs_result_code": {
-                    "type": ["string", "null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "credit_card_bin": {
                     "type": "string"
                 },
                 "cvv_result_code": {
-                    "type": ["string", "null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "credit_card_number": {
                     "type": "string"
@@ -77,7 +93,10 @@
             }
         },
         "parent_id": {
-            "type": ["integer", "null"]
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "payments_refund_attributes": {
             "type": "object",
@@ -106,7 +125,10 @@
             "type": "boolean"
         },
         "user_id": {
-            "type": ["integer", "null"]
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "currency_exchange_adjustment": {
             "type": "object",
