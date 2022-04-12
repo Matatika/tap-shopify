@@ -13,6 +13,7 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 ## Supported Streams
 
+* [Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
 * [Collects](https://shopify.dev/api/admin-rest/2022-01/resources/collect)
 * [Custom Collections](https://shopify.dev/api/admin-rest/2022-01/resources/customcollection)
 * [Customers](https://shopify.dev/api/admin-rest/2022-01/resources/customer)
@@ -27,7 +28,6 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 ## Roadmap
 
 - [ ] Add support for streams
-[Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
 [Inventory Item](https://shopify.dev/api/admin-rest/2022-01/resources/inventoryitem)
 [Inventory Levels](https://shopify.dev/api/admin-rest/2022-01/resources/inventorylevel)
 
