@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "available": {
+            "type": "number"
+        },
+        "inventory_item_id": {
+            "type": "number"
+        },
+        "location_id": {
+            "type": "number"
+        },
+        "updated_at": {
+            "type": "string"
+        }
+    }
+}

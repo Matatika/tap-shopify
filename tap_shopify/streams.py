@@ -78,6 +78,40 @@ class LocationsStream(tap_shopifyStream):
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "location.json"
 
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"location_id": record["id"]}
+
+
+class InventoryLevelsStream(tap_shopifyStream):
+    """Inventory levels stream."""
+
+    parent_stream_type = LocationsStream
+
+    name = "inventory_levels"
+    path = "/api/2022-01/inventory_levels.json?location_ids={location_id}"
+    records_jsonpath = "$.inventory_level[*]"
+    primary_keys = ["inventory_item_id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "inventory_level.json"
+
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {"inventory_item_id": record["inventory_item_id"]}
+
+
+class InventoryItemsStream(tap_shopifyStream):
+    """Inventory items stream."""
+
+    parent_stream_type = InventoryLevelsStream
+
+    name = "inventory_items"
+    path = "/api/2022-01/inventory_items/{inventory_item_id}.json"
+    records_jsonpath = "$.inventory_items[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "inventory_item.json"
+
 
 class MetafieldsStream(tap_shopifyStream):
     """Metafields stream."""

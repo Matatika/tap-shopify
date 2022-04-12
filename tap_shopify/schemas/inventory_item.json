@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "cost": {
+            "type": "string"
+        },
+        "country_code_of_origin": {
+            "type": "string"
+        },
+        "country_harmonized_system_codes": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "country_code": {
+                                "type": "string"
+                            },
+                            "harmonized_system_code": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "created_at": {
+            "type": "string"
+        },
+        "harmonized_system_code": {
+            "type": "number"
+        },
+        "id": {
+            "type": "number"
+        },
+        "province_code_of_origin": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "string"
+        },
+        "tracked": {
+            "type": "boolean"
+        },
+        "updated_at": {
+            "type": "string"
+        },
+        "requires_shipping": {
+            "type": "boolean"
+        }
+    }
+}
