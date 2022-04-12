@@ -32,18 +32,7 @@ class AbandondedCheckouts(tap_shopifyStream):
     records_jsonpath = "$.checkouts[*]"
     primary_keys = ["id"]
     replication_key = None
-    schema_filepath = SCHEMAS_DIR / "checkout.json"
-
-
-class CustomCollections(tap_shopifyStream):
-    """Custom collections stream."""
-
-    name = "custom_collections"
-    path = "/api/2022-01/custom_collections.json"
-    records_jsonpath = "$.custom_collections[*]"
-    primary_keys = ["id"]
-    replication_key = None
-    schema_filepath = SCHEMAS_DIR / "custom_collection.json"
+    schema_filepath = SCHEMAS_DIR / "abandonded_checkout.json"
 
 
 class CollectStream(tap_shopifyStream):
@@ -55,6 +44,17 @@ class CollectStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "collect.json"
+
+
+class CustomCollections(tap_shopifyStream):
+    """Custom collections stream."""
+
+    name = "custom_collections"
+    path = "/api/2022-01/custom_collections.json"
+    records_jsonpath = "$.custom_collections[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "custom_collection.json"
 
 
 class CustomersStream(tap_shopifyStream):

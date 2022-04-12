@@ -50,7 +50,7 @@
             "type": "string"
         },
         "location_id": {
-            "type": "object",
+            "type": ["object", "null"],
             "properties": {
                 "id": {
                     "type": [
