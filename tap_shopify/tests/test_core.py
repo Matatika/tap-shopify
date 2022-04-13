@@ -1,18 +1,12 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
-import datetime
 import unittest
 
 import responses
 from singer_sdk.testing import get_standard_tap_tests
 
+import tap_shopify.tests.utils as test_utils
 from tap_shopify.tap import Tap_Shopify
-
-SAMPLE_CONFIG = {
-    "access_token": "mock-token",
-    "store": "mock-store",
-    "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
-}
 
 
 class TestCore(unittest.TestCase):
@@ -21,6 +15,16 @@ class TestCore(unittest.TestCase):
     def setUp(self):
         # reset mock responses
         responses.reset()
+
+        self.mock_config = test_utils.basic_mock_config
+
+    def test_base_credentials_discovery(self):
+        """Test basic discover sync"""
+
+        catalog = Tap_Shopify(self.mock_config).discover_streams()
+
+        # expect valid catalog to be discovered
+        self.assertEqual(len(catalog), 11, "Total streams from default catalog")
 
     # Run standard built-in tap tests from the SDK:
     @responses.activate()
@@ -98,7 +102,7 @@ class TestCore(unittest.TestCase):
         )
 
         # when run standard tests
-        tests = get_standard_tap_tests(Tap_Shopify, config=SAMPLE_CONFIG)
+        tests = get_standard_tap_tests(Tap_Shopify, config=self.mock_config)
         # expect no failures
         for test in tests:
             test()
