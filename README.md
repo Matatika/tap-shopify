@@ -29,14 +29,9 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 ## Roadmap
 
+- [ ] Add state to suitable streams
 - [ ] Pagination support w/ tests
 - [ ] Add OAuth support w/ tests
-- [ ] Add admin url override configuration test
-- [ ] Fix failing test_core.py::test_standard_tap_tests
-```
-404 Client Error: Not Found for path: /api/2022-01/orders.json
-```
-- [ ] CI setup, fix lint and tests.
 - [ ] Update schema format for 'date-time' fields and 'singer.decimal'
 
 
