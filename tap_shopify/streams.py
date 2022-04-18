@@ -2,7 +2,8 @@
 
 from decimal import Decimal
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
+from urllib.parse import parse_qsl, urlsplit
 
 from singer_sdk.helpers._classproperty import classproperty
 from singer_sdk.typing import JSONTypeHelper
@@ -31,7 +32,8 @@ class AbandondedCheckouts(tap_shopifyStream):
     path = "/api/2022-01/checkouts.json"
     records_jsonpath = "$.checkouts[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "updated_at"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "abandonded_checkout.json"
 
 
@@ -42,8 +44,25 @@ class CollectStream(tap_shopifyStream):
     path = "/api/2022-01/collects.json"
     records_jsonpath = "$.collects[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "id"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "collect.json"
+
+    def get_url_params(
+        self, context: Optional[dict], next_page_token: Optional[Any]
+    ) -> Dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params: dict = {}
+
+        if next_page_token:
+            return dict(parse_qsl(urlsplit(next_page_token).query))
+
+        context_state = self.get_context_state(context)
+        last_id = context_state.get("replication_key_value")
+
+        if last_id:
+            params["since_id"] = last_id
+        return params
 
 
 class CustomCollections(tap_shopifyStream):
@@ -53,7 +72,8 @@ class CustomCollections(tap_shopifyStream):
     path = "/api/2022-01/custom_collections.json"
     records_jsonpath = "$.custom_collections[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "updated_at"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "custom_collection.json"
 
 
@@ -64,7 +84,8 @@ class CustomersStream(tap_shopifyStream):
     path = "/api/2022-01/customers.json"
     records_jsonpath = "$.customers[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "updated_at"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "customer.json"
 
 
@@ -76,6 +97,7 @@ class LocationsStream(tap_shopifyStream):
     records_jsonpath = "$.locations[*]"
     primary_keys = ["id"]
     replication_key = None
+    replication_method = "FULL_TABLE"
     schema_filepath = SCHEMAS_DIR / "location.json"
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
@@ -120,7 +142,8 @@ class MetafieldsStream(tap_shopifyStream):
     path = "/api/2022-01/metafields.json"
     records_jsonpath = "$.metafields[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "updated_at"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "metafield.json"
 
 
@@ -131,14 +154,17 @@ class OrdersStream(tap_shopifyStream):
     path = "/api/2022-01/orders.json?status=any"
     records_jsonpath = "$.orders[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "updated_at"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "order.json"
 
-    def post_process(self, row: dict, context: Optional[dict] = None) -> Optional[dict]:
+    def post_process(self, row: dict, context: Optional[dict] = None):
         """Perform syntactic transformations only."""
-        super().post_process(row, context)
-        row["subtotal_price"] = Decimal(row["subtotal_price"])
-        row["total_price"] = Decimal(row["total_price"])
+        row = super().post_process(row, context)
+
+        if row:
+            row["subtotal_price"] = Decimal(row["subtotal_price"])
+            row["total_price"] = Decimal(row["total_price"])
         return row
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
@@ -153,7 +179,8 @@ class ProductsStream(tap_shopifyStream):
     path = "/api/2022-01/products.json"
     records_jsonpath = "$.products[*]"
     primary_keys = ["id"]
-    replication_key = None
+    replication_key = "updated_at"
+    replication_method = "INCREMENTAL"
     schema_filepath = SCHEMAS_DIR / "product.json"
 
 
