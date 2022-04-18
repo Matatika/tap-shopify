@@ -29,8 +29,6 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 ## Roadmap
 
-- [ ] Add state to suitable streams
-- [ ] Pagination support w/ tests
 - [ ] Add OAuth support w/ tests
 - [ ] Update schema format for 'date-time' fields and 'singer.decimal'
 
