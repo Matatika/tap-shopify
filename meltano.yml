@@ -3,28 +3,28 @@ send_anonymous_usage_stats: true
 project_id: tap-shopify
 plugins:
   extractors:
-  - name: tap-shopify
-    namespace: tap_shopify
-    pip_url: -e .
-    capabilities:
-    - state
-    - catalog
-    - discover
-    config:
-      start_date: '2010-01-01T00:00:00Z'
-    settings:
-    #
-    # To configure using Meltano, declare settings and their types here:
-    #  or use a .env
-    # TAP_SHOPIFY_ACCESS_TOKEN=
-    # TAP_SHOPIFY_STORE=
-    #
-    - name: access_token
-      kind: password
-    - name: start_date
-      value: '2010-01-01T00:00:00Z'
-    - name: store
+    - name: tap-shopify
+      namespace: tap_shopify
+      pip_url: -e .
+      capabilities:
+        - state
+        - catalog
+        - discover
+      settings:
+        #
+        # To configure using Meltano, declare settings and their types here:
+        #  or use a .env
+        # TAP_SHOPIFY_ACCESS_TOKEN=
+        # TAP_SHOPIFY_STORE=
+        #
+        - name: access_token
+          kind: password
+        - name: store
+        - name: start_date
+        - name: admin_url
+      config:
+        start_date: "2010-01-01T00:00:00Z"
   loaders:
-  - name: target-jsonl
-    variant: andyh1203
-    pip_url: target-jsonl
+    - name: target-jsonl
+      variant: andyh1203
+      pip_url: target-jsonl
