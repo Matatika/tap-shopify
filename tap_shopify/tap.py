@@ -7,7 +7,7 @@ from singer_sdk import typing as th  # JSON schema typing helpers
 
 # Import stream types
 from tap_shopify.streams import (
-    AbandondedCheckouts,
+    AbandonedCheckouts,
     CollectStream,
     CustomCollections,
     CustomersStream,
@@ -21,7 +21,7 @@ from tap_shopify.streams import (
 )
 
 STREAM_TYPES = [
-    AbandondedCheckouts,
+    AbandonedCheckouts,
     CollectStream,
     CustomCollections,
     CustomersStream,
