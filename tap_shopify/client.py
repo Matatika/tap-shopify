@@ -77,7 +77,7 @@ class tap_shopifyStream(RESTStream):
         return params
 
     def post_process(self, row: dict, context: Optional[dict] = None):
-        """Dedupe rows by id or updated_at."""
+        """Deduplicate rows by id or updated_at."""
         current_row_id = row.get("id")
 
         updated_at = row.get("updated_at")
