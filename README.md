@@ -10,8 +10,24 @@ This Shopify tap produces JSON-formatted data following the Singer spec.
 `tap-shopify` is a Singer tap for the [Shopify REST API](https://shopify.dev/api) built 
 with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
+## Configuration
+
+How to get your `access_token`: [Shopify Docs](https://www.shopify.co.uk/partners/blog/17056443-how-to-generate-a-shopify-api-token).
+
+- `access_token` (required) - The access token to authenticate with the Shopify API.
+- `store` (required) - Shopify store id, use the prefix of your admin url. e.g. https://[your store].myshopify.com/admin.
+- `start_date` (optional) - The earliest record date to sync.
+- `admin_url` (optional) - The full admin url for your Shopify store (overrides 'store' property).
+
+If you plan on using environment variables to declare these settings then you will be using:
+- `TAP_SHOPIFY_ACCESS_TOKEN`
+- `TAP_SHOPIFY_STORE`
+- `TAP_SHOPIFY_START_DATE`
+- `TAP_SHOPIFY_ADMIN_URL`
 
 ## Supported Streams
+
+### Default Streams
 
 * [Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
 * [Collects](https://shopify.dev/api/admin-rest/2022-01/resources/collect)
@@ -26,9 +42,9 @@ with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 * [Transactions](https://shopify.dev/api/admin-rest/2022-01/resources/transaction)
 
 
-
 ## Roadmap
 
+- [ ] Add the [User](https://shopify.dev/api/admin-rest/2022-01/resources/user#resource-object) stream, and work out allowing user to enable plus streams
 - [ ] Add OAuth support w/ tests
 - [ ] Update schema format for 'date-time' fields and 'singer.decimal'
 
