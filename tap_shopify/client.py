@@ -65,10 +65,15 @@ class tap_shopifyStream(RESTStream):
             return params
 
         context_state = self.get_context_state(context)
-
         last_updated = context_state.get("replication_key_value")
+
+        start_date = self.config.get("start_date")
+
         if last_updated:
             params["updated_at_min"] = last_updated
+            return params
+        elif start_date:
+            params["created_at_min"] = start_date
         return params
 
     def post_process(self, row: dict, context: Optional[dict] = None):
