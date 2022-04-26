@@ -18,6 +18,7 @@ from tap_shopify.streams import (
     OrdersStream,
     ProductsStream,
     TransactionsStream,
+    UsersStream,
 )
 
 STREAM_TYPES = [
@@ -68,8 +69,16 @@ class Tap_Shopify(Tap):
                 "The Admin url for your Shopify store " + "(overrides 'store' property)"
             ),
         ),
+        th.Property(
+            "is_plus_account",
+            th.BooleanType,
+            description=("Enabled Shopify plus account endpoints.)"),
+        ),
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
+        if self.config.get("is_plus_account"):
+            STREAM_TYPES.append(UsersStream)
+
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]

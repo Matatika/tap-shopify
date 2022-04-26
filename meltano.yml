@@ -22,6 +22,8 @@ plugins:
         - name: store
         - name: start_date
         - name: admin_url
+        - name: is_plus_account
+          kind: boolean
       config:
         start_date: "2010-01-01T00:00:00Z"
   loaders:

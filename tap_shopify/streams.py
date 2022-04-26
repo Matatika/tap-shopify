@@ -195,3 +195,15 @@ class TransactionsStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "transaction.json"
+
+
+class UsersStream(tap_shopifyStream):
+    """Users stream."""
+
+    name = "users"
+    path = "/api/2022-01/users.json"
+    records_jsonpath = "$.users[*]"
+    primary_keys = ["id"]
+    replication_key = None
+    replication_method = "FULL_TABLE"
+    schema_filepath = SCHEMAS_DIR / "user.json"
