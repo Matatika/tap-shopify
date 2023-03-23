@@ -1,8 +1,8 @@
 """REST client handling, including tap_shopifyStream base class."""
 
 from pathlib import Path
-from urllib.parse import parse_qsl, urlsplit
 from typing import Any, Dict, Optional
+from urllib.parse import parse_qsl, urlsplit
 
 import requests
 from singer_sdk.streams import RESTStream

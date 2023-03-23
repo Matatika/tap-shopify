@@ -26,16 +26,16 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
             self.basic_mock_config, ["products"]
         )
 
-        resource_url = "https://mock-store.myshopify.com/admin/api/2022-01/products.json"
+        resource_url = (
+            "https://mock-store.myshopify.com/admin/api/2022-01/products.json"
+        )
 
         rsp1 = responses.Response(
             responses.GET,
             resource_url,
             json=test_utils.customer_return_data,
             status=200,
-            headers={
-                "link": f"{resource_url}?limit=1&page_info=12345; rel=next"
-            },
+            headers={"link": f"{resource_url}?limit=1&page_info=12345; rel=next"},
         )
 
         rsp2 = responses.Response(
@@ -43,9 +43,7 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
             f"{resource_url}?limit=1&page_info=12345",
             json=test_utils.customer_return_data,
             status=200,
-            headers={
-                "link": f"{resource_url}?limit=1&page_info=12346; rel=next"
-            },
+            headers={"link": f"{resource_url}?limit=1&page_info=12346; rel=next"},
         )
 
         rsp3 = responses.Response(
