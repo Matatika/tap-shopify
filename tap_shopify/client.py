@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import Any, Dict, Optional
+from urllib.parse import parse_qsl, urlsplit
 
 import requests
 from singer_sdk.streams import RESTStream
@@ -62,7 +63,7 @@ class tap_shopifyStream(RESTStream):
         params: dict = {}
 
         if next_page_token:
-            return params
+            return dict(parse_qsl(urlsplit(next_page_token).query))
 
         context_state = self.get_context_state(context)
         last_updated = context_state.get("replication_key_value")
