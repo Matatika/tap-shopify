@@ -26,25 +26,44 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
             self.basic_mock_config, ["products"]
         )
 
-        responses.add(
+        resource_url = "https://mock-store.myshopify.com/admin/api/2022-01/products.json"
+
+        rsp1 = responses.Response(
             responses.GET,
-            "https://mock-store.myshopify.com/" + "admin/api/2022-01/products.json",
+            resource_url,
             json=test_utils.customer_return_data,
             status=200,
             headers={
-                "link": "<https://mock-store.myshopify.com/"
-                + "admin/api/2022-1/products.json?limit=1?page_info=12345}>; rel=next}"
+                "link": f"{resource_url}?limit=1&page_info=12345; rel=next"
             },
         )
 
-        responses.add(
+        rsp2 = responses.Response(
             responses.GET,
-            "https://mock-store.myshopify.com"
-            + "/admin/api/2022-1/products.json?limit=1?page_info=12345",
+            f"{resource_url}?limit=1&page_info=12345",
+            json=test_utils.customer_return_data,
+            status=200,
+            headers={
+                "link": f"{resource_url}?limit=1&page_info=12346; rel=next"
+            },
+        )
+
+        rsp3 = responses.Response(
+            responses.GET,
+            f"{resource_url}?limit=1&page_info=12346",
+            json=test_utils.customer_return_data,
             status=200,
         )
 
+        responses.add(rsp1)
+        responses.add(rsp2)
+        responses.add(rsp3)
+
         tap.sync_all()
+
+        self.assertIs(rsp1.call_count, 1)
+        self.assertIs(rsp2.call_count, 1)
+        self.assertIs(rsp3.call_count, 1)
 
         self.assertEqual(len(test_utils.SINGER_MESSAGES), 2)
         self.assertIsInstance(test_utils.SINGER_MESSAGES[0], singer.SchemaMessage)

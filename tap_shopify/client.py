@@ -1,6 +1,7 @@
 """REST client handling, including tap_shopifyStream base class."""
 
 from pathlib import Path
+from urllib.parse import parse_qsl, urlsplit
 from typing import Any, Dict, Optional
 
 import requests
@@ -62,7 +63,7 @@ class tap_shopifyStream(RESTStream):
         params: dict = {}
 
         if next_page_token:
-            return params
+            return dict(parse_qsl(urlsplit(next_page_token).query))
 
         context_state = self.get_context_state(context)
         last_updated = context_state.get("replication_key_value")
