@@ -18,10 +18,16 @@
             "type": "string"
         },
         "first_name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "last_name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "orders_count": {
             "type": "integer"
