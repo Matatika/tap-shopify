@@ -21,7 +21,7 @@ class TestCore(unittest.TestCase):
     def test_base_credentials_discovery(self):
         """Test basic discover sync"""
 
-        catalog = Tap_Shopify(self.mock_config).discover_streams()
+        catalog = Tap_Shopify(config=self.mock_config).discover_streams()
 
         # expect valid catalog to be discovered
         self.assertEqual(len(catalog), 11, "Total streams from default catalog")

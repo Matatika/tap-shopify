@@ -3,7 +3,7 @@
 import unittest
 
 import responses
-import singer
+import singer_sdk._singerlib as singer
 
 import tap_shopify.tests.utils as test_utils
 
@@ -63,6 +63,5 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         self.assertIs(rsp2.call_count, 1)
         self.assertIs(rsp3.call_count, 1)
 
-        self.assertEqual(len(test_utils.SINGER_MESSAGES), 2)
+        self.assertEqual(len(test_utils.SINGER_MESSAGES), 1)
         self.assertIsInstance(test_utils.SINGER_MESSAGES[0], singer.SchemaMessage)
-        self.assertIsInstance(test_utils.SINGER_MESSAGES[1], singer.StateMessage)

@@ -3,7 +3,7 @@
 import unittest
 
 import responses
-import singer
+import singer_sdk._singerlib as singer
 
 import tap_shopify.tests.utils as test_utils
 

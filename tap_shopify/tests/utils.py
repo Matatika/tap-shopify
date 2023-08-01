@@ -1,7 +1,7 @@
 """Utilities used in this module."""
 
 from singer_sdk.helpers import _catalog
-from singer_sdk.helpers._singer import Catalog
+from singer_sdk._singerlib.catalog import Catalog
 
 from tap_shopify.tap import Tap_Shopify
 
