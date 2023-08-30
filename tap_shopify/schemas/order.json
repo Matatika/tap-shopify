@@ -544,7 +544,7 @@
           "type": ["string", "null"]
         }
       },
-      "type": "object"
+      "type": ["object", "null"]
     },
     "customer": {
       "properties": {
