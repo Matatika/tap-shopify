@@ -14,7 +14,7 @@ class AbandonedCheckouts(tap_shopifyStream):
     """Abandoned checkouts stream."""
 
     name = "abandoned_checkouts"
-    path = "/api/2022-01/checkouts.json"
+    path = "/api/2023-04/checkouts.json"
     records_jsonpath = "$.checkouts[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -26,7 +26,7 @@ class CollectStream(tap_shopifyStream):
     """Collect stream."""
 
     name = "collects"
-    path = "/api/2022-01/collects.json"
+    path = "/api/2023-04/collects.json"
     records_jsonpath = "$.collects[*]"
     primary_keys = ["id"]
     replication_key = "id"
@@ -54,7 +54,7 @@ class CustomCollections(tap_shopifyStream):
     """Custom collections stream."""
 
     name = "custom_collections"
-    path = "/api/2022-01/custom_collections.json"
+    path = "/api/2023-04/custom_collections.json"
     records_jsonpath = "$.custom_collections[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -66,7 +66,7 @@ class CustomersStream(tap_shopifyStream):
     """Customers stream."""
 
     name = "customers"
-    path = "/api/2022-01/customers.json"
+    path = "/api/2023-04/customers.json"
     records_jsonpath = "$.customers[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -78,7 +78,7 @@ class LocationsStream(tap_shopifyStream):
     """Locations stream."""
 
     name = "locations"
-    path = "/api/2022-01/locations.json"
+    path = "/api/2023-04/locations.json"
     records_jsonpath = "$.locations[*]"
     primary_keys = ["id"]
     replication_key = None
@@ -96,7 +96,7 @@ class InventoryLevelsStream(tap_shopifyStream):
     parent_stream_type = LocationsStream
 
     name = "inventory_levels"
-    path = "/api/2022-01/inventory_levels.json?location_ids={location_id}"
+    path = "/api/2023-04/inventory_levels.json"
     records_jsonpath = "$.inventory_level[*]"
     primary_keys = ["inventory_item_id"]
     replication_key = None
@@ -105,6 +105,28 @@ class InventoryLevelsStream(tap_shopifyStream):
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"inventory_item_id": record["inventory_item_id"]}
+    
+    def get_url_params(
+        self, context: Optional[dict], next_page_token: Optional[Any]
+    ) -> Dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params: dict = {}
+
+        if next_page_token:
+            return dict(parse_qsl(urlsplit(next_page_token).query))
+
+        context_state = self.get_context_state(context)
+        last_updated = context_state.get("replication_key_value")
+
+        start_date = self.config.get("start_date")
+
+        if last_updated:
+            params["updated_at_min"] = last_updated
+            return params
+        elif start_date:
+            params["created_at_min"] = start_date
+        params["location_ids"] = context["location_id"]
+        return params
 
 
 class InventoryItemsStream(tap_shopifyStream):
@@ -113,7 +135,7 @@ class InventoryItemsStream(tap_shopifyStream):
     parent_stream_type = InventoryLevelsStream
 
     name = "inventory_items"
-    path = "/api/2022-01/inventory_items/{inventory_item_id}.json"
+    path = "/api/2023-04/inventory_items/{inventory_item_id}.json"
     records_jsonpath = "$.inventory_items[*]"
     primary_keys = ["id"]
     replication_key = None
@@ -124,7 +146,7 @@ class MetafieldsStream(tap_shopifyStream):
     """Metafields stream."""
 
     name = "metafields"
-    path = "/api/2022-01/metafields.json"
+    path = "/api/2023-04/metafields.json"
     records_jsonpath = "$.metafields[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -136,7 +158,7 @@ class OrdersStream(tap_shopifyStream):
     """Orders stream."""
 
     name = "orders"
-    path = "/api/2022-01/orders.json?status=any"
+    path = "/api/2023-04/orders.json"
     records_jsonpath = "$.orders[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -155,13 +177,35 @@ class OrdersStream(tap_shopifyStream):
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
         return {"order_id": record["id"]}
+    
+    def get_url_params(
+        self, context: Optional[dict], next_page_token: Optional[Any]
+    ) -> Dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization."""
+        params: dict = {}
+
+        if next_page_token:
+            return dict(parse_qsl(urlsplit(next_page_token).query))
+
+        context_state = self.get_context_state(context)
+        last_updated = context_state.get("replication_key_value")
+
+        start_date = self.config.get("start_date")
+
+        if last_updated:
+            params["updated_at_min"] = last_updated
+            return params
+        elif start_date:
+            params["created_at_min"] = start_date
+        params["status"] = "any"
+        return params
 
 
 class ProductsStream(tap_shopifyStream):
     """Products stream."""
 
     name = "products"
-    path = "/api/2022-01/products.json"
+    path = "/api/2023-04/products.json"
     records_jsonpath = "$.products[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -175,7 +219,7 @@ class TransactionsStream(tap_shopifyStream):
     parent_stream_type = OrdersStream
 
     name = "transactions"
-    path = "/api/2022-01/orders/{order_id}/transactions.json"
+    path = "/api/2023-04/orders/{order_id}/transactions.json"
     records_jsonpath = "$.transactions[*]"
     primary_keys = ["id"]
     replication_key = None
@@ -186,7 +230,7 @@ class UsersStream(tap_shopifyStream):
     """Users stream."""
 
     name = "users"
-    path = "/api/2022-01/users.json"
+    path = "/api/2023-04/users.json"
     records_jsonpath = "$.users[*]"
     primary_keys = ["id"]
     replication_key = None
