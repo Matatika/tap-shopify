@@ -3,37 +3,37 @@
     "type": "object",
     "properties": {
         "created_at": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "description": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "id": {
-            "type": "integer"
+          "type": "integer"
         },
         "key": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "namespace": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "owner_id": {
-            "type": "integer"
+          "type": "integer"
         },
         "owner_resource": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "updated_at": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "value": {
-            "type": "integer"
+          "type": ["string", "integer", "boolean","null"]
         },
         "type": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "value_type": {
-            "type": "string"
+          "type": ["string", "null"]
         }
-    }
+      }
 }

@@ -3,152 +3,131 @@
     "type": "object",
     "properties": {
         "amount": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "authorization": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "authorization_expires_at": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "created_at": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "currency": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "device_id": {
-            "type": [
-                "integer",
-                "null"
-            ]
+          "type": ["integer", "null"]
         },
         "error_code": {
-            "type": [
-                "string",
-                "null"
-            ]
+          "type": ["string", "null"]
         },
         "extended_authorization_attributes": {
-            "type": "object",
-            "properties": {
-                "extended_authorization_expires_at": {
-                    "type": "string"
-                },
-                "standard_authorization_expires_at": {
-                    "type": "string"
-                }
+          "properties": {
+            "extended_authorization_expires_at": {
+              "type": ["string", "null"]
+            },
+            "standard_authorization_expires_at": {
+              "type": ["string", "null"]
             }
+          },
+          "type": "object"
         },
         "gateway": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "id": {
-            "type": "integer"
+          "type": "integer"
         },
         "kind": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "location_id": {
-            "type": ["object", "null"],
-            "properties": {
-                "id": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
-                }
+          "properties": {
+            "id": {
+              "type": ["integer", "null"]
             }
+          },
+          "type": ["object", "null"]
         },
         "message": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "order_id": {
-            "type": "integer"
+          "type": "integer"
         },
         "payment_details": {
-            "type": "object",
-            "properties": {
-                "avs_result_code": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "credit_card_bin": {
-                    "type": "string"
-                },
-                "cvv_result_code": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "credit_card_number": {
-                    "type": "string"
-                },
-                "credit_card_company": {
-                    "type": "string"
-                }
+          "properties": {
+            "avs_result_code": {
+              "type": ["string", "null"]
+            },
+            "credit_card_bin": {
+              "type": ["string", "null"]
+            },
+            "cvv_result_code": {
+              "type": ["string", "null"]
+            },
+            "credit_card_number": {
+              "type": ["string", "null"]
+            },
+            "credit_card_company": {
+              "type": ["string", "null"]
             }
+          },
+          "type": "object"
         },
         "parent_id": {
-            "type": [
-                "integer",
-                "null"
-            ]
+          "type": ["integer", "null"]
         },
         "payments_refund_attributes": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "string"
-                },
-                "acquirer_reference_number": {
-                    "type": "string"
-                }
+          "properties": {
+            "status": {
+              "type": ["string", "null"]
+            },
+            "acquirer_reference_number": {
+              "type": ["string", "null"]
             }
+          },
+          "type": "object"
         },
         "processed_at": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "receipt": {
-            "type": "object"
+          "type": "object"
         },
         "source_name": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "status": {
-            "type": "string"
+          "type": ["string", "null"]
         },
         "test": {
-            "type": "boolean"
+          "type": "boolean"
         },
         "user_id": {
-            "type": [
-                "integer",
-                "null"
-            ]
+          "type": ["integer", "null"]
         },
         "currency_exchange_adjustment": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "currency": {
-                    "type": "string"
-                },
-                "adjustment": {
-                    "type": "string"
-                },
-                "final_amount": {
-                    "type": "string"
-                },
-                "original_amount": {
-                    "type": "string"
-                }
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "currency": {
+              "type": ["string", "null"]
+            },
+            "adjustment": {
+              "type": ["string", "null"]
+            },
+            "final_amount": {
+              "type": ["string", "null"]
+            },
+            "original_amount": {
+              "type": ["string", "null"]
             }
+          },
+          "type": "object"
         }
-    }
+      }
 }

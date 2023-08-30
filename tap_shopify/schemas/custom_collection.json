@@ -3,19 +3,30 @@
     "type": "object",
     "properties": {
         "body_html": {
-            "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "handle": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "image": {
-            "type": "object",
             "properties": {
                 "alt": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "src": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "width": {
                     "type": "integer"
@@ -24,9 +35,13 @@
                     "type": "integer"
                 },
                 "created_at": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
-            }
+            },
+            "type": "object"
         },
         "id": {
             "type": "integer"
@@ -35,22 +50,40 @@
             "type": "boolean"
         },
         "published_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "published_scope": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "sort_order": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "template_suffix": {
-            "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "title": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "updated_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         }
     }
 }
