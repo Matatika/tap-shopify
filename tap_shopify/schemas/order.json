@@ -761,7 +761,7 @@
                     "type": ["string", "null"]
                   }
                 },
-                "type": "object"
+                "type": ["object", "null"]
               },
               "presentment_money": {
                 "properties": {
@@ -772,31 +772,31 @@
                     "type": ["string", "null"]
                   }
                 },
-                "type": "object"
+                "type": ["object", "null"]
               }
             },
-            "type": "object"
+            "type": ["object", "null"]
           },
           "product_exists": {
-            "type": "boolean"
+            "type": ["boolean", "null"]
           },
           "product_id": {
-            "type": "integer"
+            "type": ["integer", "null"]
           },
           "properties": {
-            "type": "array"
+            "type": ["array", "null"]
           },
           "quantity": {
-            "type": "integer"
+            "type": ["integer", "null"]
           },
           "requires_shipping": {
-            "type": "boolean"
+            "type": ["boolean", "null"]
           },
           "sku": {
             "type": ["string", "null"]
           },
           "taxable": {
-            "type": "boolean"
+            "type": ["boolean", "null"]
           },
           "title": {
             "type": ["string", "null"]
@@ -815,7 +815,7 @@
                     "type": ["string", "null"]
                   }
                 },
-                "type": "object"
+                "type": ["object", "null"]
               },
               "presentment_money": {
                 "properties": {
@@ -826,13 +826,13 @@
                     "type": ["string", "null"]
                   }
                 },
-                "type": "object"
+                "type": ["object", "null"]
               }
             },
-            "type": "object"
+            "type": ["object", "null"]
           },
           "variant_id": {
-            "type": "integer"
+            "type": ["integer", "null"]
           },
           "variant_inventory_management": {
             "type": ["string", "null"]
@@ -844,18 +844,18 @@
             "type": ["string", "null"]
           },
           "tax_lines": {
-            "type": "array"
+            "type": ["array", "null"]
           },
           "duties": {
-            "type": "array"
+            "type": ["array", "null"]
           },
           "discount_allocations": {
-            "type": "array"
+            "type": ["array", "null"]
           }
         },
-        "type": "object"
+        "type": ["object", "null"]
       },
-      "type": "array"
+      "type": ["array", "null"]
     },
     "payment_details": {
       "properties": {
