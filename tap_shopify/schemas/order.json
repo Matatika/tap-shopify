@@ -248,7 +248,7 @@
       "type": ["string", "null"]
     },
     "original_total_duties_set": {
-      "type": ["string", "null"]
+      "type": ["string", "object", "null"]
     },
     "payment_gateway_names": {
       "items": {
