@@ -134,10 +134,10 @@
       "type": ["object", "null"]
     },
     "current_total_duties_set": {
-      "type": ["object", "string", "null"]
+      "type": ["object", "null"]
     },
     "current_total_price": {
-      "type": ["object", "string", "null"]
+      "type": ["string", "null"]
     },
     "current_total_price_set": {
       "properties": {
@@ -167,7 +167,7 @@
       "type": ["object", "null"]
     },
     "current_total_tax": {
-      "type": ["object", "string", "null"]
+      "type": ["string", "null"]
     },
     "current_total_tax_set": {
       "properties": {
@@ -248,7 +248,7 @@
       "type": ["string", "null"]
     },
     "original_total_duties_set": {
-      "type": ["string", "object", "null"]
+      "type": ["object", "null"]
     },
     "payment_gateway_names": {
       "items": {
@@ -360,7 +360,7 @@
       "type": ["object", "null"]
     },
     "total_line_items_price": {
-      "type": ["object", "string", "null"]
+      "type": ["string", "null"]
     },
     "total_line_items_price_set": {
       "properties": {
@@ -390,7 +390,7 @@
       "type": ["object", "null"]
     },
     "total_outstanding": {
-      "type": ["object", "string", "null"]
+      "type": ["string", "null"]
     },
     "total_price": {
       "minimum": 0,
@@ -424,7 +424,7 @@
       "type": ["object", "null"]
     },
     "total_price_usd": {
-      "type": ["object", "string", "null"]
+      "type": ["string", "null"]
     },
     "total_shipping_price_set": {
       "properties": {
@@ -454,7 +454,7 @@
       "type": ["object", "null"]
     },
     "total_tax": {
-      "type": ["object", "string", "null"]
+      "type": ["string", "null"]
     },
     "total_tax_set": {
       "properties": {
