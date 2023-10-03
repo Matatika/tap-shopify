@@ -14,7 +14,7 @@ class AbandonedCheckouts(tap_shopifyStream):
     """Abandoned checkouts stream."""
 
     name = "abandoned_checkouts"
-    path = "/api/2023-04/checkouts.json"
+    path = "/checkouts.json"
     records_jsonpath = "$.checkouts[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -26,7 +26,7 @@ class CollectStream(tap_shopifyStream):
     """Collect stream."""
 
     name = "collects"
-    path = "/api/2023-04/collects.json"
+    path = "/collects.json"
     records_jsonpath = "$.collects[*]"
     primary_keys = ["id"]
     replication_key = "id"
@@ -54,7 +54,7 @@ class CustomCollections(tap_shopifyStream):
     """Custom collections stream."""
 
     name = "custom_collections"
-    path = "/api/2023-04/custom_collections.json"
+    path = "/custom_collections.json"
     records_jsonpath = "$.custom_collections[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -66,7 +66,7 @@ class CustomersStream(tap_shopifyStream):
     """Customers stream."""
 
     name = "customers"
-    path = "/api/2023-04/customers.json"
+    path = "/customers.json"
     records_jsonpath = "$.customers[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -78,7 +78,7 @@ class LocationsStream(tap_shopifyStream):
     """Locations stream."""
 
     name = "locations"
-    path = "/api/2023-04/locations.json"
+    path = "/locations.json"
     records_jsonpath = "$.locations[*]"
     primary_keys = ["id"]
     replication_key = None
@@ -96,7 +96,7 @@ class InventoryLevelsStream(tap_shopifyStream):
     parent_stream_type = LocationsStream
 
     name = "inventory_levels"
-    path = "/api/2023-04/inventory_levels.json"
+    path = "/inventory_levels.json"
     records_jsonpath = "$.inventory_level[*]"
     primary_keys = ["inventory_item_id"]
     replication_key = None
@@ -135,7 +135,7 @@ class InventoryItemsStream(tap_shopifyStream):
     parent_stream_type = InventoryLevelsStream
 
     name = "inventory_items"
-    path = "/api/2023-04/inventory_items/{inventory_item_id}.json"
+    path = "/inventory_items/{inventory_item_id}.json"
     records_jsonpath = "$.inventory_items[*]"
     primary_keys = ["id"]
     replication_key = None
@@ -146,7 +146,7 @@ class MetafieldsStream(tap_shopifyStream):
     """Metafields stream."""
 
     name = "metafields"
-    path = "/api/2023-04/metafields.json"
+    path = "/metafields.json"
     records_jsonpath = "$.metafields[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -158,7 +158,7 @@ class OrdersStream(tap_shopifyStream):
     """Orders stream."""
 
     name = "orders"
-    path = "/api/2023-04/orders.json"
+    path = "/orders.json"
     records_jsonpath = "$.orders[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -205,7 +205,7 @@ class ProductsStream(tap_shopifyStream):
     """Products stream."""
 
     name = "products"
-    path = "/api/2023-04/products.json"
+    path = "/products.json"
     records_jsonpath = "$.products[*]"
     primary_keys = ["id"]
     replication_key = "updated_at"
@@ -219,7 +219,7 @@ class TransactionsStream(tap_shopifyStream):
     parent_stream_type = OrdersStream
 
     name = "transactions"
-    path = "/api/2023-04/orders/{order_id}/transactions.json"
+    path = "/orders/{order_id}/transactions.json"
     records_jsonpath = "$.transactions[*]"
     primary_keys = ["id"]
     replication_key = None
@@ -230,7 +230,7 @@ class UsersStream(tap_shopifyStream):
     """Users stream."""
 
     name = "users"
-    path = "/api/2023-04/users.json"
+    path = "/users.json"
     records_jsonpath = "$.users[*]"
     primary_keys = ["id"]
     replication_key = None

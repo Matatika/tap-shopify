@@ -6,6 +6,7 @@ import responses
 import singer_sdk._singerlib as singer
 
 import tap_shopify.tests.utils as test_utils
+from tap_shopify.client import API_VERSION
 
 
 class TestTapShopifyWithBaseCredentials(unittest.TestCase):
@@ -30,8 +31,8 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         # This repsonse url matches the custom admin_url in admin_url_mock_config
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/"
-            + "custom_admin_url/api/2022-01/customers.json",
+            f"https://mock-store.myshopify.com/custom_admin_url/api/{API_VERSION}"
+            "/customers.json",
             json=test_utils.customer_return_data,
             status=200,
         )
