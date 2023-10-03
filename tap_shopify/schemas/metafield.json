@@ -3,37 +3,66 @@
     "type": "object",
     "properties": {
         "created_at": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "description": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "id": {
-          "type": "integer"
+            "type": "integer"
         },
         "key": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "namespace": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "owner_id": {
-          "type": "integer"
+            "type": "integer"
         },
         "owner_resource": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "updated_at": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "value": {
-          "type": ["string", "integer", "boolean","null"]
+            "type": [
+                "string",
+                "integer",
+                "boolean",
+                "null"
+            ]
         },
         "type": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "value_type": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         }
-      }
+    }
 }

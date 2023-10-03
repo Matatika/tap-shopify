@@ -3,25 +3,34 @@
     "type": "object",
     "properties": {
         "collection_id": {
-          "type": "integer"
+            "type": "integer"
         },
         "created_at": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "id": {
-          "type": "integer"
+            "type": "integer"
         },
         "position": {
-          "type": "integer"
+            "type": "integer"
         },
         "product_id": {
-          "type": "integer"
+            "type": "integer"
         },
         "sort_value": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "updated_at": {
-          "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         }
-      }
+    }
 }
