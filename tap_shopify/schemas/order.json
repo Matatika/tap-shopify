@@ -1123,6 +1123,32 @@
                         "null"
                     ]
                 },
+                "email_marketing_consent": {
+                    "properties": {
+                        "state": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "opt_in_level": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "consent_updated_at": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    },
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
                 "admin_graphql_api_id": {
                     "type": [
                         "string",
@@ -1607,6 +1633,143 @@
         },
         "shipping_lines": {
             "type": "array"
+        },
+        "company": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "confirmation_number": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "current_total_additional_fees_set": {
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "merchant_of_record_app_id": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "original_total_additional_fees_set": {
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "po_number": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "tax_exempt": {
+            "type": "boolean"
+        },
+        "shipping_address": {
+            "properties": {
+                "zip": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "city": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "phone": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "company": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "country": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "address1": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "address2": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "latitude": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "province": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "last_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "longitude": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "first_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "country_code": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "province_code": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "type": [
+                "object",
+                "null"
+            ]
         }
     }
 }

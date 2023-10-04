@@ -94,6 +94,18 @@
                 "string",
                 "null"
             ]
+        },
+        "country_name": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "admin_graphql_api_id": {
+            "type": [
+                "string",
+                "null"
+            ]
         }
     }
 }

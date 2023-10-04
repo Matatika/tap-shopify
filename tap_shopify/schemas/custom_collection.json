@@ -84,6 +84,12 @@
                 "string",
                 "null"
             ]
+        },
+        "admin_graphql_api_id": {
+            "type": [
+                "string",
+                "null"
+            ]
         }
     }
 }
