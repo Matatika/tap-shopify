@@ -6,6 +6,7 @@ import responses
 from singer_sdk.testing import get_standard_tap_tests
 
 import tap_shopify.tests.utils as test_utils
+from tap_shopify.client import API_VERSION
 from tap_shopify.tap import Tap_Shopify
 
 
@@ -33,70 +34,72 @@ class TestCore(unittest.TestCase):
         # given a mock response to the standard stream test
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/orders.json?status=any",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}"
+            "/orders.json?status=any",
             json={},
             status=200,
         )
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/products.json",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/products.json",
             json={},
             status=200,
         )
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/customers.json",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/customers.json",
             json={},
             status=200,
         )
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/locations.json",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/locations.json",
             json={},
             status=200,
         )
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/collects.json",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/collects.json",
             json={},
             status=200,
         )
         responses.add(
             responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/checkouts.json",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/checkouts.json",
+            json={},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}"
+            "/custom_collections.json",
+            json={},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/metafields.json",
+            json={},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}"
+            "/transactions.json",
+            json={},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}"
+            "/inventory_levels.json?location_ids=1234",
             json={},
             status=200,
         )
         responses.add(
             responses.GET,
             "https://mock-store.myshopify.com/"
-            + "admin/api/2022-01/custom_collections.json",
-            json={},
-            status=200,
-        )
-        responses.add(
-            responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/metafields.json",
-            json={},
-            status=200,
-        )
-        responses.add(
-            responses.GET,
-            "https://mock-store.myshopify.com/admin/api/2022-01/transactions.json",
-            json={},
-            status=200,
-        )
-        responses.add(
-            responses.GET,
-            "https://mock-store.myshopify.com/"
-            + "admin/api/2022-01/inventory_levels.json?location_ids=1234",
-            json={},
-            status=200,
-        )
-        responses.add(
-            responses.GET,
-            "https://mock-store.myshopify.com/"
-            + "admin/api/2022-01/inventory_items/1234.json",
+            + "admin/api/{API_VERSION}/inventory_items/1234.json",
             json={},
             status=200,
         )

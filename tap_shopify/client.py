@@ -10,6 +10,7 @@ from singer_sdk.streams import RESTStream
 from tap_shopify.auth import tap_shopifyAuthenticator
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
+API_VERSION = "2023-10"
 
 
 class tap_shopifyStream(RESTStream):
@@ -20,8 +21,9 @@ class tap_shopifyStream(RESTStream):
         """Return the API URL root, configurable via tap settings."""
         url_base = self.config.get(
             "admin_url"
-        ) or "https://%s.myshopify.com/admin" % self.config.get("store")
-        return url_base
+        ) or "https://{store}.myshopify.com/admin".format(store=self.config["store"])
+
+        return f"{url_base}/api/{API_VERSION}"
 
     records_jsonpath = "$[*]"  # Or override `parse_response`.
     next_page_token_jsonpath = "$.next_page"  # Or override `get_next_page_token`.

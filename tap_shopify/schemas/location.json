@@ -6,52 +6,109 @@
             "type": "boolean"
         },
         "address1": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "address2": {
-            "type": ["string", "null"]
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "city": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "country": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "country_code": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "created_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "id": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "legacy": {
             "type": "boolean"
         },
         "name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "phone": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "province": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "province_code": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "updated_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "zip": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "localized_country_name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "localized_province_name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "country_name": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "admin_graphql_api_id": {
+            "type": [
+                "string",
+                "null"
+            ]
         }
     }
 }

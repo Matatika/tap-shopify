@@ -6,6 +6,7 @@ import responses
 import singer_sdk._singerlib as singer
 
 import tap_shopify.tests.utils as test_utils
+from tap_shopify.client import API_VERSION
 
 
 class TestTapShopifyWithBaseCredentials(unittest.TestCase):
@@ -21,13 +22,12 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
 
     @responses.activate
     def test_pagination(self):
-
         tap = test_utils.set_up_tap_with_custom_catalog(
             self.basic_mock_config, ["products"]
         )
 
         resource_url = (
-            "https://mock-store.myshopify.com/admin/api/2022-01/products.json"
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/products.json"
         )
 
         rsp1 = responses.Response(

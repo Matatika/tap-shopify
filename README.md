@@ -31,21 +31,21 @@ If you plan on using environment variables to declare these settings then you wi
 
 ### Default Streams
 
-* [Abandoned Checkouts](https://shopify.dev/api/admin-rest/2022-01/resources/abandoned-checkouts)
-* [Collects](https://shopify.dev/api/admin-rest/2022-01/resources/collect)
-* [Custom Collections](https://shopify.dev/api/admin-rest/2022-01/resources/customcollection)
-* [Customers](https://shopify.dev/api/admin-rest/2022-01/resources/customer)
-* [Inventory Item](https://shopify.dev/api/admin-rest/2022-01/resources/inventoryitem)
-* [Inventory Levels](https://shopify.dev/api/admin-rest/2022-01/resources/inventorylevel)
-* [Locations](https://shopify.dev/api/admin-rest/2022-01/resources/location)
-* [Metafields](https://shopify.dev/api/admin-rest/2022-01/resources/metafield)
-* [Orders](https://shopify.dev/api/admin-rest/2022-01/resources/order)
-* [Products](https://shopify.dev/api/admin-rest/2022-01/resources/product)
-* [Transactions](https://shopify.dev/api/admin-rest/2022-01/resources/transaction)
+* [Abandoned Checkouts](https://shopify.dev/api/admin-rest/2023-10/resources/abandoned-checkouts)
+* [Collects](https://shopify.dev/api/admin-rest/2023-10/resources/collect)
+* [Custom Collections](https://shopify.dev/api/admin-rest/2023-10/resources/customcollection)
+* [Customers](https://shopify.dev/api/admin-rest/2023-10/resources/customer)
+* [Inventory Item](https://shopify.dev/api/admin-rest/2023-10/resources/inventoryitem)
+* [Inventory Levels](https://shopify.dev/api/admin-rest/2023-10/resources/inventorylevel)
+* [Locations](https://shopify.dev/api/admin-rest/2023-10/resources/location)
+* [Metafields](https://shopify.dev/api/admin-rest/2023-10/resources/metafield)
+* [Orders](https://shopify.dev/api/admin-rest/2023-10/resources/order)
+* [Products](https://shopify.dev/api/admin-rest/2023-10/resources/product)
+* [Transactions](https://shopify.dev/api/admin-rest/2023-10/resources/transaction)
 
 ### Shopify Plus Streams
 
-* [User](https://shopify.dev/api/admin-rest/2022-01/resources/user#resource-object)
+* [User](https://shopify.dev/api/admin-rest/2023-10/resources/user#resource-object)
 
 
 ## Roadmap

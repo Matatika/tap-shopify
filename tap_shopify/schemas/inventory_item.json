@@ -3,49 +3,75 @@
     "type": "object",
     "properties": {
         "cost": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "country_code_of_origin": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "country_harmonized_system_codes": {
             "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "type": "object",
-                        "properties": {
-                            "country_code": {
-                                "type": "string"
-                            },
-                            "harmonized_system_code": {
-                                "type": "string"
-                            }
-                        }
+                "type": "object",
+                "properties": {
+                    "country_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "harmonized_system_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     }
-                ]
+                }
             }
         },
         "created_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "harmonized_system_code": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "id": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "province_code_of_origin": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "sku": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "tracked": {
             "type": "boolean"
         },
         "updated_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "requires_shipping": {
             "type": "boolean"

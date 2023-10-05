@@ -3,16 +3,28 @@
     "type": "object",
     "properties": {
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "first_name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "email": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "url": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "im": {
             "type": "null"
@@ -24,13 +36,19 @@
             "type": "null"
         },
         "last_name": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "account_owner": {
             "type": "boolean"
         },
         "receive_announcements": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "bio": {
             "type": "null"
@@ -38,21 +56,26 @@
         "permissions": {
             "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "type": "string"
-                    }
-                ]
+                "type": "string"
             }
         },
         "locale": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "user_type": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "admin_graphql_api_id": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "tfa_enabled?": {
             "type": "boolean"

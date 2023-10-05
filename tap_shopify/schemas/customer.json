@@ -3,19 +3,31 @@
     "type": "object",
     "properties": {
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "email": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "accepts_marketing": {
             "type": "boolean"
         },
         "created_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "updated_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "first_name": {
             "type": [
@@ -30,13 +42,22 @@
             ]
         },
         "orders_count": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "state": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "total_spent": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "last_order_id": {
             "type": [
@@ -69,7 +90,10 @@
             ]
         },
         "tags": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "last_order_name": {
             "type": [
@@ -78,18 +102,26 @@
             ]
         },
         "currency": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "addresses": {
-            "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "customer_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "first_name": {
                         "type": [
@@ -110,22 +142,40 @@
                         ]
                     },
                     "address1": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "address2": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "city": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "province": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "country": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "zip": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "phone": {
                         "type": [
@@ -134,25 +184,41 @@
                         ]
                     },
                     "name": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "province_code": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "country_code": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "country_name": {
-                        "type": "string"
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "default": {
                         "type": "boolean"
                     }
                 }
-            }
+            },
+            "type": "array"
         },
         "accepts_marketing_updated_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "marketing_opt_in_level": {
             "type": [
@@ -161,20 +227,28 @@
             ]
         },
         "tax_exemptions": {
-            "type": "array",
-            "items": {}
+            "items": {},
+            "type": "array"
         },
         "admin_graphql_api_id": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "default_address": {
-            "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "customer_id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "first_name": {
                     "type": [
@@ -195,22 +269,40 @@
                     ]
                 },
                 "address1": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "address2": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "city": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "province": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "country": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "zip": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "phone": {
                     "type": [
@@ -219,21 +311,95 @@
                     ]
                 },
                 "name": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "province_code": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "country_code": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "country_name": {
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "default": {
                     "type": "boolean"
                 }
-            }
+            },
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "email_marketing_consent": {
+            "properties": {
+                "state": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "opt_in_level": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "consent_updated_at": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "sms_marketing_consent": {
+            "properties": {
+                "consent_collected_from": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "consent_updated_at": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "opt_in_level": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "state": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "type": [
+                "object",
+                "null"
+            ]
         }
     }
 }
