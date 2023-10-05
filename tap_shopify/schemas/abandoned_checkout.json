@@ -230,54 +230,50 @@
         },
         "discount_codes": {
             "items": {
-                "anyOf": [
-                    {
+                "type": [
+                    "object",
+                    "null"
+                ],
+                "properties": {
+                    "discount_code": {
                         "type": [
                             "object",
                             "null"
                         ],
                         "properties": {
-                            "discount_code": {
+                            "id": {
                                 "type": [
-                                    "object",
+                                    "integer",
                                     "null"
-                                ],
-                                "properties": {
-                                    "id": {
-                                        "type": [
-                                            "integer",
-                                            "null"
-                                        ]
-                                    },
-                                    "code": {
-                                        "type": [
-                                            "string",
-                                            "null"
-                                        ]
-                                    },
-                                    "created_at": {
-                                        "type": [
-                                            "string",
-                                            "null"
-                                        ]
-                                    },
-                                    "updated_at": {
-                                        "type": [
-                                            "string",
-                                            "null"
-                                        ]
-                                    },
-                                    "usage_count": {
-                                        "type": [
-                                            "integer",
-                                            "null"
-                                        ]
-                                    }
-                                }
+                                ]
+                            },
+                            "code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "created_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "updated_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "usage_count": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
                             }
                         }
                     }
-                ]
+                }
             },
             "type": "array"
         },

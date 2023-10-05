@@ -17,28 +17,24 @@
         "country_harmonized_system_codes": {
             "type": "array",
             "items": {
-                "anyOf": [
-                    {
+                "type": [
+                    "object",
+                    "null"
+                ],
+                "properties": {
+                    "country_code": {
                         "type": [
-                            "object",
+                            "string",
                             "null"
-                        ],
-                        "properties": {
-                            "country_code": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
-                            },
-                            "harmonized_system_code": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
-                            }
-                        }
+                        ]
+                    },
+                    "harmonized_system_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     }
-                ]
+                }
             }
         },
         "created_at": {

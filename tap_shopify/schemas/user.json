@@ -56,13 +56,9 @@
         "permissions": {
             "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
-                    }
+                "type": [
+                    "string",
+                    "null"
                 ]
             }
         },
