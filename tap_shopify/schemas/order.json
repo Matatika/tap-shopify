@@ -363,7 +363,7 @@
         },
         "device_id": {
             "type": [
-                "string",
+                "integer",
                 "null"
             ]
         },
