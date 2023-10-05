@@ -56,10 +56,7 @@
         "permissions": {
             "type": "array",
             "items": {
-                "type": [
-                    "string",
-                    "null"
-                ]
+                "type": "string"
             }
         },
         "locale": {

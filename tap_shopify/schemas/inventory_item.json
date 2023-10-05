@@ -17,10 +17,7 @@
         "country_harmonized_system_codes": {
             "type": "array",
             "items": {
-                "type": [
-                    "object",
-                    "null"
-                ],
+                "type": "object",
                 "properties": {
                     "country_code": {
                         "type": [

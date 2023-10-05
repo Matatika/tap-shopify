@@ -230,10 +230,7 @@
         },
         "discount_codes": {
             "items": {
-                "type": [
-                    "object",
-                    "null"
-                ],
+                "type": "object",
                 "properties": {
                     "discount_code": {
                         "type": [
@@ -303,6 +300,7 @@
         },
         "line_items": {
             "items": {
+                "type": "object",
                 "properties": {
                     "sku": {
                         "type": [
@@ -517,6 +515,7 @@
         },
         "shipping_lines": {
             "items": {
+                "type": "object",
                 "properties": {
                     "code": {
                         "type": [
@@ -560,6 +559,7 @@
         },
         "tax_lines": {
             "items": {
+                "type": "object",
                 "properties": {
                     "rate": {
                         "type": [

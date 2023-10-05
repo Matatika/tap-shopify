@@ -245,10 +245,7 @@
                         ]
                     }
                 },
-                "type": [
-                    "object",
-                    "null"
-                ]
+                "type": "object"
             },
             "type": "array"
         },
@@ -289,10 +286,7 @@
                         "type": "array"
                     }
                 },
-                "type": [
-                    "object",
-                    "null"
-                ]
+                "type": "object"
             },
             "type": "array"
         },
@@ -365,10 +359,7 @@
                         ]
                     }
                 },
-                "type": [
-                    "object",
-                    "null"
-                ]
+                "type": "object"
             },
             "type": "array"
         },

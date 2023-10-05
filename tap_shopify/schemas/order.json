@@ -457,10 +457,7 @@
         },
         "payment_gateway_names": {
             "items": {
-                "type": [
-                    "string",
-                    "null"
-                ]
+                "type": "string"
             },
             "type": "array"
         },
@@ -1583,10 +1580,7 @@
                         "type": "array"
                     }
                 },
-                "type": [
-                    "object",
-                    "null"
-                ]
+                "type": "object"
             },
             "type": "array"
         },
