@@ -3,16 +3,28 @@
     "type": "object",
     "properties": {
         "available": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "inventory_item_id": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "location_id": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "updated_at": {
-            "type": "string"
+            "type": [
+                "string",
+                "null"
+            ]
         }
     }
 }

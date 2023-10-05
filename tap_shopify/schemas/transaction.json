@@ -59,7 +59,10 @@
                     ]
                 }
             },
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "gateway": {
             "type": [
@@ -68,7 +71,10 @@
             ]
         },
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "kind": {
             "type": [
@@ -97,7 +103,10 @@
             ]
         },
         "order_id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "payment_details": {
             "properties": {
@@ -132,7 +141,10 @@
                     ]
                 }
             },
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "parent_id": {
             "type": [
@@ -155,7 +167,10 @@
                     ]
                 }
             },
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "processed_at": {
             "type": [
@@ -164,7 +179,10 @@
             ]
         },
         "receipt": {
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "source_name": {
             "type": [
@@ -190,7 +208,10 @@
         "currency_exchange_adjustment": {
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "currency": {
                     "type": [
@@ -217,7 +238,10 @@
                     ]
                 }
             },
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         }
     }
 }

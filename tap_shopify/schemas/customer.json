@@ -3,7 +3,10 @@
     "type": "object",
     "properties": {
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "email": {
             "type": [
@@ -39,7 +42,10 @@
             ]
         },
         "orders_count": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "state": {
             "type": [
@@ -105,10 +111,16 @@
             "items": {
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "customer_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "first_name": {
                         "type": [
@@ -198,7 +210,10 @@
                         "type": "boolean"
                     }
                 },
-                "type": "object"
+                "type": [
+                    "object",
+                    "null"
+                ]
             },
             "type": "array"
         },
@@ -227,10 +242,16 @@
         "default_address": {
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "customer_id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "first_name": {
                     "type": [
@@ -320,7 +341,10 @@
                     "type": "boolean"
                 }
             },
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "email_marketing_consent": {
             "properties": {

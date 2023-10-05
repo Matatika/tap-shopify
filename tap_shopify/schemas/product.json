@@ -3,7 +3,10 @@
     "type": "object",
     "properties": {
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "title": {
             "type": [
@@ -32,8 +35,8 @@
         "created_at": {
             "format": "date-time",
             "type": [
-                "null",
-                "string"
+                "string",
+                "null"
             ]
         },
         "handle": {
@@ -45,15 +48,15 @@
         "updated_at": {
             "format": "date-time",
             "type": [
-                "null",
-                "string"
+                "string",
+                "null"
             ]
         },
         "published_at": {
             "format": "date-time",
             "type": [
-                "null",
-                "string"
+                "string",
+                "null"
             ]
         },
         "template_suffix": {
@@ -90,10 +93,16 @@
             "items": {
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "product_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "title": {
                         "type": [
@@ -114,7 +123,10 @@
                         ]
                     },
                     "position": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "inventory_policy": {
                         "type": [
@@ -161,8 +173,8 @@
                     "created_at": {
                         "format": "date-time",
                         "type": [
-                            "null",
-                            "string"
+                            "string",
+                            "null"
                         ]
                     },
                     "updated_at": {
@@ -181,7 +193,10 @@
                         ]
                     },
                     "grams": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "image_id": {
                         "type": [
@@ -191,7 +206,10 @@
                         ]
                     },
                     "weight": {
-                        "type": "number"
+                        "type": [
+                            "number",
+                            "null"
+                        ]
                     },
                     "weight_unit": {
                         "type": [
@@ -200,13 +218,22 @@
                         ]
                     },
                     "inventory_item_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "inventory_quantity": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "old_inventory_quantity": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "requires_shipping": {
                         "type": "boolean"
@@ -218,7 +245,10 @@
                         ]
                     }
                 },
-                "type": "object"
+                "type": [
+                    "object",
+                    "null"
+                ]
             },
             "type": "array"
         },
@@ -226,10 +256,16 @@
             "items": {
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "product_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "name": {
                         "type": [
@@ -238,7 +274,10 @@
                         ]
                     },
                     "position": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "values": {
                         "items": {
@@ -250,7 +289,10 @@
                         "type": "array"
                     }
                 },
-                "type": "object"
+                "type": [
+                    "object",
+                    "null"
+                ]
             },
             "type": "array"
         },
@@ -258,26 +300,35 @@
             "items": {
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "product_id": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "position": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "created_at": {
                         "format": "date-time",
                         "type": [
-                            "null",
-                            "string"
+                            "string",
+                            "null"
                         ]
                     },
                     "updated_at": {
                         "format": "date-time",
                         "type": [
-                            "null",
-                            "string"
+                            "string",
+                            "null"
                         ]
                     },
                     "alt": {
@@ -287,10 +338,16 @@
                         ]
                     },
                     "width": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "height": {
-                        "type": "integer"
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "src": {
                         "type": [
@@ -308,33 +365,45 @@
                         ]
                     }
                 },
-                "type": "object"
+                "type": [
+                    "object",
+                    "null"
+                ]
             },
             "type": "array"
         },
         "image": {
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "product_id": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "position": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "created_at": {
                     "format": "date-time",
                     "type": [
-                        "null",
-                        "string"
+                        "string",
+                        "null"
                     ]
                 },
                 "updated_at": {
                     "format": "date-time",
                     "type": [
-                        "null",
-                        "string"
+                        "string",
+                        "null"
                     ]
                 },
                 "alt": {
@@ -344,10 +413,16 @@
                     ]
                 },
                 "width": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "height": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "src": {
                     "type": [

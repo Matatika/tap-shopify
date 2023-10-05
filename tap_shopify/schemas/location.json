@@ -42,7 +42,10 @@
             ]
         },
         "id": {
-            "type": "number"
+            "type": [
+                "number",
+                "null"
+            ]
         },
         "legacy": {
             "type": "boolean"

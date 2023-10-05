@@ -29,10 +29,16 @@
                     ]
                 },
                 "width": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "height": {
-                    "type": "integer"
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
                 },
                 "created_at": {
                     "type": [
@@ -41,10 +47,16 @@
                     ]
                 }
             },
-            "type": "object"
+            "type": [
+                "object",
+                "null"
+            ]
         },
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "published": {
             "type": "boolean"

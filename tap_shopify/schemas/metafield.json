@@ -15,7 +15,10 @@
             ]
         },
         "id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "key": {
             "type": [
@@ -30,7 +33,10 @@
             ]
         },
         "owner_id": {
-            "type": "integer"
+            "type": [
+                "integer",
+                "null"
+            ]
         },
         "owner_resource": {
             "type": [
