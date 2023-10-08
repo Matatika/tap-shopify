@@ -1623,8 +1623,109 @@
             ]
         },
         "payment_terms": {
+            "properties": {
+                "created_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "due_in_days": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "payment_schedules": {
+                    "items": {
+                        "properties": {
+                            "amount": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "completed_at": {
+                                "format": "date-time",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "created_at": {
+                                "format": "date-time",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "currency": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "due_at": {
+                                "format": "date-time",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "id": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "issued_at": {
+                                "format": "date-time",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "updated_at": {
+                                "format": "date-time",
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "payment_terms_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "payment_terms_type": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "updated_at": {
+                    "format": "date-time",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
             "type": [
-                "string",
+                "object",
                 "null"
             ]
         },
