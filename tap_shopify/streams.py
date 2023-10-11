@@ -86,7 +86,7 @@ class InventoryLevelsStream(tap_shopifyStream):
 
     name = "inventory_levels"
     path = "/inventory_levels.json"
-    records_jsonpath = "$.inventory_level[*]"
+    records_jsonpath = "$.inventory_levels[*]"
     primary_keys = ["inventory_item_id"]
     schema_filepath = SCHEMAS_DIR / "inventory_level.json"
 
@@ -111,7 +111,7 @@ class InventoryItemsStream(tap_shopifyStream):
 
     name = "inventory_items"
     path = "/inventory_items/{inventory_item_id}.json"
-    records_jsonpath = "$.inventory_items[*]"
+    records_jsonpath = "$.inventory_item"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "inventory_item.json"
 
