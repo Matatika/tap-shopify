@@ -74,21 +74,27 @@ class tap_shopifyStream(RESTStream):
 
         if last_updated:
             params["updated_at_min"] = last_updated
-            return params
         elif start_date:
             params["created_at_min"] = start_date
+
         return params
 
     def post_process(self, row: dict, context: Optional[dict] = None):
         """Deduplicate rows by id or updated_at."""
-        current_row_id = row.get("id")
+        if not self.replication_key:
+            return row
 
-        updated_at = row.get("updated_at")
+        row_id = row.get("id")
+        row_updated_at = row.get(self.replication_key)
 
-        if (current_row_id and current_row_id == self.last_id) or (
-            updated_at == self.get_starting_replication_key_value(context)
+        if not row_id or not row_updated_at:
+            return row
+
+        if (
+            row_id == self.last_id
+            or row_updated_at == self.get_starting_replication_key_value(context)
         ):
             return None
 
-        self.last_id = current_row_id
+        self.last_id = row_id
         return row
