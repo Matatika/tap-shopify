@@ -5,8 +5,6 @@ from singer_sdk.helpers import _catalog
 
 from tap_shopify.tap import Tap_Shopify
 
-SINGER_MESSAGES = []
-
 basic_mock_config = {"access_token": "1234", "store": "mock-store"}
 
 admin_url_mock_config = {
@@ -16,11 +14,6 @@ admin_url_mock_config = {
 }
 
 customer_return_data = {"id": "1234567890"}
-
-
-def accumulate_singer_messages(message):
-    """Collect singer library write_message in tests."""
-    SINGER_MESSAGES.append(message)
 
 
 def set_up_tap_with_custom_catalog(mock_config, stream_list):

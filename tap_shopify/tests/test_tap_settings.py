@@ -3,7 +3,6 @@
 import unittest
 
 import responses
-import singer_sdk._singerlib as singer
 
 import tap_shopify.tests.utils as test_utils
 from tap_shopify.client import API_VERSION
@@ -16,9 +15,6 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         self.admin_url_mock_config = test_utils.admin_url_mock_config
 
         responses.reset()
-        del test_utils.SINGER_MESSAGES[:]
-
-        singer.write_message = test_utils.accumulate_singer_messages
 
     @responses.activate
     def test_admin_url_setting(self):
