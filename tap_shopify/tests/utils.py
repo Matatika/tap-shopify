@@ -1,5 +1,7 @@
 """Utilities used in this module."""
 
+from datetime import datetime
+
 from singer_sdk._singerlib.catalog import Catalog
 from singer_sdk.helpers import _catalog
 
@@ -13,7 +15,23 @@ admin_url_mock_config = {
     "admin_url": "https://mock-store.myshopify.com/custom_admin_url",
 }
 
-customer_return_data = {"id": "1234567890"}
+customer_return_data = {
+    "customers": [
+        {
+            "id": "1234567890",
+            "updated_at": datetime.now().isoformat(),
+        }
+    ]
+}
+
+product_return_data = {
+    "products": [
+        {
+            "id": "1234567890",
+            "updated_at": datetime.now().isoformat(),
+        }
+    ]
+}
 
 
 def set_up_tap_with_custom_catalog(mock_config, stream_list):
