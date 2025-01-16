@@ -2,7 +2,6 @@
 
 from decimal import Decimal
 from pathlib import Path
-from typing import Optional
 
 from tap_shopify.client import tap_shopifyStream
 
@@ -74,7 +73,7 @@ class LocationsStream(tap_shopifyStream):
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "location.json"
 
-    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+    def get_child_context(self, record, context):
         """Return a context dictionary for child streams."""
         return {"location_id": record["id"]}
 
@@ -90,7 +89,7 @@ class InventoryLevelsStream(tap_shopifyStream):
     primary_keys = ["inventory_item_id"]
     schema_filepath = SCHEMAS_DIR / "inventory_level.json"
 
-    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+    def get_child_context(self, record, context):
         """Return a context dictionary for child streams."""
         return {"inventory_item_id": record["inventory_item_id"]}
 
@@ -137,7 +136,7 @@ class OrdersStream(tap_shopifyStream):
     replication_key = "updated_at"
     schema_filepath = SCHEMAS_DIR / "order.json"
 
-    def post_process(self, row: dict, context: Optional[dict] = None):
+    def post_process(self, row, context=None):
         """Perform syntactic transformations only."""
         row = super().post_process(row, context)
 
@@ -146,7 +145,7 @@ class OrdersStream(tap_shopifyStream):
             row["total_price"] = Decimal(row["total_price"])
         return row
 
-    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+    def get_child_context(self, record, context):
         """Return a context dictionary for child streams."""
         return {"order_id": record["id"]}
 

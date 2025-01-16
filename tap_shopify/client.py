@@ -1,7 +1,7 @@
 """REST client handling, including tap_shopifyStream base class."""
 
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 from urllib.parse import parse_qsl, urlsplit
 
 import requests
@@ -58,9 +58,7 @@ class tap_shopifyStream(RESTStream):
 
         return next_link["url"]
 
-    def get_url_params(
-        self, context: Optional[dict], next_page_token: Optional[Any]
-    ) -> Dict[str, Any]:
+    def get_url_params(self, context, next_page_token):
         """Return a dictionary of values to be used in URL parameterization."""
         params: dict = {}
 
@@ -79,7 +77,7 @@ class tap_shopifyStream(RESTStream):
 
         return params
 
-    def post_process(self, row: dict, context: Optional[dict] = None):
+    def post_process(self, row, context=None):
         """Deduplicate rows by id or updated_at."""
         if not self.replication_key:
             return row
