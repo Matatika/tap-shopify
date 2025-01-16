@@ -29,7 +29,7 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         rsp1 = responses.Response(
             responses.GET,
             resource_url,
-            json=test_utils.customer_return_data,
+            json=test_utils.product_return_data,
             status=200,
             headers={"link": f"{resource_url}?limit=1&page_info=12345; rel=next"},
         )
@@ -37,7 +37,7 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         rsp2 = responses.Response(
             responses.GET,
             f"{resource_url}?limit=1&page_info=12345",
-            json=test_utils.customer_return_data,
+            json=test_utils.product_return_data,
             status=200,
             headers={"link": f"{resource_url}?limit=1&page_info=12346; rel=next"},
         )
@@ -45,7 +45,7 @@ class TestTapShopifyWithBaseCredentials(unittest.TestCase):
         rsp3 = responses.Response(
             responses.GET,
             f"{resource_url}?limit=1&page_info=12346",
-            json=test_utils.customer_return_data,
+            json=test_utils.product_return_data,
             status=200,
         )
 
