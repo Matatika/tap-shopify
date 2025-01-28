@@ -22,7 +22,7 @@ black = "^24.10.0"
 pydocstyle = "^6.1.1"
 mypy = "^1.14"
 types-requests = "^2.32.0"
-isort = "^5.13.2"
+isort = "^6.0.0"
 responses = "0.25.6"
 
 [tool.isort]
