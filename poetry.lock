@@ -1248,13 +1248,13 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.43.1"
+version = "0.44.2"
 description = "A framework for building Singer taps"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "singer_sdk-0.43.1-py3-none-any.whl", hash = "sha256:bd03da661317907b26db6806f1adb2a365c6183889f981602a405f8f784aa1ba"},
-    {file = "singer_sdk-0.43.1.tar.gz", hash = "sha256:4941208e95bde7865943b06677536aee316a755b5b3b7af0a6ef7717454e8645"},
+    {file = "singer_sdk-0.44.2-py3-none-any.whl", hash = "sha256:caa4bca45c3a8d4cdcc84566d38ec49919b22d29b1a9a45518d41906a22706ed"},
+    {file = "singer_sdk-0.44.2.tar.gz", hash = "sha256:6be24fe8a014bfb20cab8b09a1030b3be9a33e3283072731f07dde276dc368f1"},
 ]
 
 [package.dependencies]
@@ -1271,7 +1271,7 @@ jsonpath-ng = ">=1.5.3"
 jsonschema = ">=4.16.0"
 packaging = ">=23.1"
 python-dotenv = ">=0.20"
-PyYAML = ">=6.0"
+pyyaml = ">=6.0"
 referencing = ">=0.30.0"
 requests = ">=2.25.1"
 setuptools = "<=70.3.0"
@@ -1283,8 +1283,8 @@ typing-extensions = ">=4.5.0"
 [package.extras]
 docs = ["furo (>=2024.5.6)", "myst-parser (>=3)", "pytest (>=7.2.1)", "sphinx (>=7)", "sphinx-copybutton (>=0.5.2)", "sphinx-inline-tabs (>=2023.4.21)", "sphinx-notfound-page (>=1.0.0)", "sphinx-reredirects (>=0.1.5)"]
 faker = ["faker (>=22.5)"]
-jwt = ["PyJWT (>=2.4,<3.0)", "cryptography (>=3.4.6)"]
-parquet = ["numpy (>=1.22)", "numpy (>=1.22,<2.1)", "pyarrow (>=13)"]
+jwt = ["cryptography (>=3.4.6)", "pyjwt (>=2.4,<3.0)"]
+parquet = ["numpy (>=1.22)", "pyarrow (>=13)"]
 s3 = ["fs-s3fs (>=1.1.1)", "s3fs (>=2024.9.0)"]
 ssh = ["paramiko (>=3.3.0)"]
 testing = ["pytest (>=7.2.1)"]
@@ -1540,4 +1540,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "be400e9469ea49b90566a0972d146538cea5823c82adcf5063b6539114d9a565"
+content-hash = "7779a0235430f377867c7d42bffcfa8b32acce9b2dd845ee4902ff879e1acc75"
