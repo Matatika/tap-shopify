@@ -1304,14 +1304,14 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.43.1"
+version = "0.45.4"
 description = "A framework for building Singer taps"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "singer_sdk-0.43.1-py3-none-any.whl", hash = "sha256:bd03da661317907b26db6806f1adb2a365c6183889f981602a405f8f784aa1ba"},
-    {file = "singer_sdk-0.43.1.tar.gz", hash = "sha256:4941208e95bde7865943b06677536aee316a755b5b3b7af0a6ef7717454e8645"},
+    {file = "singer_sdk-0.45.4-py3-none-any.whl", hash = "sha256:a8112cb0b5c784900c0f5100d9550ef22891083434f3742aa7d3168eda06862d"},
+    {file = "singer_sdk-0.45.4.tar.gz", hash = "sha256:9237ec032fbad68a6595d008caccec4e6005320bcd66bd969f80a023d62aea2c"},
 ]
 
 [package.dependencies]
@@ -1328,7 +1328,7 @@ jsonpath-ng = ">=1.5.3"
 jsonschema = ">=4.16.0"
 packaging = ">=23.1"
 python-dotenv = ">=0.20"
-PyYAML = ">=6.0"
+pyyaml = ">=6.0"
 referencing = ">=0.30.0"
 requests = ">=2.25.1"
 setuptools = "<=70.3.0"
@@ -1338,10 +1338,10 @@ sqlalchemy = ">=1.4,<3.0"
 typing-extensions = ">=4.5.0"
 
 [package.extras]
-docs = ["furo (>=2024.5.6)", "myst-parser (>=3)", "pytest (>=7.2.1)", "sphinx (>=7)", "sphinx-copybutton (>=0.5.2)", "sphinx-inline-tabs (>=2023.4.21)", "sphinx-notfound-page (>=1.0.0)", "sphinx-reredirects (>=0.1.5)"]
 faker = ["faker (>=22.5)"]
-jwt = ["PyJWT (>=2.4,<3.0)", "cryptography (>=3.4.6)"]
-parquet = ["numpy (>=1.22) ; python_version >= \"3.10\"", "numpy (>=1.22,<2.1) ; python_version == \"3.9\"", "pyarrow (>=13)"]
+jwt = ["cryptography (>=3.4.6)", "pyjwt (>=2.4,<3.0)"]
+msgspec = ["msgspec (>=0.19.0)"]
+parquet = ["numpy (>=1.22)", "pyarrow (>=13)"]
 s3 = ["fs-s3fs (>=1.1.1)", "s3fs (>=2024.9.0)"]
 ssh = ["paramiko (>=3.3.0)"]
 testing = ["pytest (>=7.2.1)"]
@@ -1609,4 +1609,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "889005c4f7317a649bbd0d37f4202cc46ba2eb1edebe36006019da1215655976"
+content-hash = "ac79d2ca8a7ab8ca416d0c5f503a22d8d8632bed097f4eb32c9790d0f814e027"
