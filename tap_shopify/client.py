@@ -34,6 +34,8 @@ class tap_shopifyStream(RESTStream):
         """Return a configured requests session."""
         session = super().requests_session
         session.verify = self.config.get("verify_ssl", True)
+        if isinstance(session.verify, str):
+            session.verify = session.verify.lower() == 'true'
         return session
 
     @property
