@@ -30,6 +30,15 @@ class tap_shopifyStream(RESTStream):
     last_id = None
 
     @property
+    def requests_session(self) -> requests.Session:
+        """Return a configured requests session."""
+        session = super().requests_session
+        session.verify = self.config.get("verify_ssl", True)
+        if isinstance(session.verify, str):
+            session.verify = session.verify.lower() == 'true'
+        return session
+
+    @property
     def authenticator(self):
         """Return a new authenticator object."""
         return tap_shopifyAuthenticator(
