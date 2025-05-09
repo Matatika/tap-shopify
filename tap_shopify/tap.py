@@ -74,6 +74,11 @@ class Tap_Shopify(Tap):
             th.BooleanType,
             description=("Enabled Shopify plus account endpoints.)"),
         ),
+        th.Property(
+            "verify_ssl",
+            th.BooleanType,
+            description=("Verify SSL certificates."),
+        ),
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
