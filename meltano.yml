@@ -21,6 +21,8 @@ plugins:
     - name: admin_url
     - name: is_plus_account
       kind: boolean
+    - name: verify_ssl
+      kind: boolean
     config:
       start_date: '2010-01-01T00:00:00Z'
   loaders:
