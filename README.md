@@ -165,6 +165,24 @@ Our team would be happy to help [www.matatika.com](https://www.matatika.com)
 It is our intention that all subsequent changes to this software are made available to the community. Under the terms of this license, you must open source your platform code if you distribute this software-as-a-service.  Applications that reside inside an organization’s network do not trigger the release of the source code.
 
 
+## Helpful commands for local testing
+
+`pip install poetry`
+
+`poetry install`
+
+### Get every catalog 
+
+`poetry run tap-shopify --config config.json --discover > all_catalogs.json`
+
+### Get a specific catalog (e.g. products)
+
+`jq '.streams = [.streams[] | select(.stream == "products")]' all_catalogs.json > products_catalog.json`
+
+### Run tap for a specific catalog (e.g. products)
+
+`poetry run tap-shopify --config config.json --catalog products_catalog.json > products_output.jsonl`
+
 ---
 
 Copyright &copy; 2022 Matatika
