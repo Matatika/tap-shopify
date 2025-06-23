@@ -16,7 +16,7 @@ singer-sdk = "^0.47.0"
 certifi = "2025.1.31" # See https://github.com/certifi/python-certifi/issues/349
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.4.0"
+pytest = "^8.4.1"
 tox = "^4.26.0"
 flake8 = "^7.3.0"
 black = "^25.1.0"
