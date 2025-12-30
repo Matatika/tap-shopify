@@ -152,11 +152,44 @@ class OrdersStream(tap_shopifyStream):
     def get_url_params(self, context, next_page_token):
         """Return a dictionary of values to be used in URL parameterization."""
         params = super().get_url_params(context, next_page_token)
+        params["limit"] = 250
 
         if not next_page_token:
             params["status"] = "any"
 
         return params
+
+
+class LineItemsStream(tap_shopifyStream):
+    """Line items stream (child of orders)."""
+
+    parent_stream_type = OrdersStream
+
+    name = "line_items"
+    path = "/orders/{order_id}.json"
+    records_jsonpath = "$.order.line_items[*]"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "line_item.json"
+
+    def get_url_params(self, context, next_page_token):
+        """Line items fetched per order; no pagination or filtering params."""
+        return {}
+
+
+class ShippingLinesStream(tap_shopifyStream):
+    """Shipping lines stream (child of orders)."""
+
+    parent_stream_type = OrdersStream
+
+    name = "shipping_lines"
+    path = "/orders/{order_id}.json"
+    records_jsonpath = "$.order.shipping_lines[*]"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "shipping_line.json"
+
+    def get_url_params(self, context, next_page_token):
+        """Shipping lines fetched per order; no pagination params."""
+        return {}
 
 
 class ProductsStream(tap_shopifyStream):
@@ -180,6 +213,59 @@ class TransactionsStream(tap_shopifyStream):
     records_jsonpath = "$.transactions[*]"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "transaction.json"
+
+
+class RefundsStream(tap_shopifyStream):
+    """Refunds stream."""
+
+    parent_stream_type = OrdersStream
+
+    name = "refunds"
+    path = "/orders/{order_id}/refunds.json"
+    records_jsonpath = "$.refunds[*]"
+    primary_keys = ["id"]
+    replication_key = "created_at"
+    schema_filepath = SCHEMAS_DIR / "refund.json"
+
+    def get_child_context(self, record, context):
+        """Pass refund context to child streams."""
+        return {"order_id": context["order_id"], "refund_id": record["id"]}
+
+    def get_url_params(self, context, next_page_token):
+        """Refunds are scoped to an order and do not support pagination params."""
+        return {}
+
+
+class RefundLineItemsStream(tap_shopifyStream):
+    """Refund line items stream (child of refunds)."""
+
+    parent_stream_type = RefundsStream
+
+    name = "refund_line_items"
+    path = "/orders/{order_id}/refunds/{refund_id}.json"
+    records_jsonpath = "$.refund.refund_line_items[*]"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "refund_line_item.json"
+
+    def get_url_params(self, context, next_page_token):
+        """Refund line items fetched per refund; no pagination params."""
+        return {}
+
+
+class OrderAdjustmentsStream(tap_shopifyStream):
+    """Order adjustments stream (child of refunds)."""
+
+    parent_stream_type = RefundsStream
+
+    name = "order_adjustments"
+    path = "/orders/{order_id}/refunds/{refund_id}.json"
+    records_jsonpath = "$.refund.order_adjustments[*]"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "order_adjustment.json"
+
+    def get_url_params(self, context, next_page_token):
+        """Order adjustments fetched per refund; no pagination params."""
+        return {}
 
 
 class UsersStream(tap_shopifyStream):

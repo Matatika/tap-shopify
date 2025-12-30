@@ -1,0 +1,141 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "variant_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "product_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "title": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "variant_title": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "name": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "sku": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "quantity": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "fulfillable_quantity": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "fulfillment_status": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "grams": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "price": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "total_discount": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "requires_shipping": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "taxable": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "gift_card": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "properties": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+            }
+        },
+        "discount_allocations": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+            }
+        },
+        "duties": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+            }
+        },
+        "admin_graphql_api_id": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    }
+}

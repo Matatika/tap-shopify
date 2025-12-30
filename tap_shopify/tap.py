@@ -17,6 +17,11 @@ from tap_shopify.streams import (
     MetafieldsStream,
     OrdersStream,
     ProductsStream,
+    LineItemsStream,
+    ShippingLinesStream,
+    OrderAdjustmentsStream,
+    RefundLineItemsStream,
+    RefundsStream,
     TransactionsStream,
     UsersStream,
 )
@@ -31,6 +36,11 @@ STREAM_TYPES = [
     LocationsStream,
     MetafieldsStream,
     OrdersStream,
+    LineItemsStream,
+    ShippingLinesStream,
+    RefundsStream,
+    RefundLineItemsStream,
+    OrderAdjustmentsStream,
     ProductsStream,
     TransactionsStream,
 ]

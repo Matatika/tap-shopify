@@ -1,0 +1,116 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "title": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "code": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "source": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "phone": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "price": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "discounted_price": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "subtotal": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "tax_lines": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "price": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "rate": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "title": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            }
+        },
+        "discount_allocations": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "object"
+            }
+        },
+        "requested_fulfillment_service_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "carrier_identifier": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "delivery_category": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "admin_graphql_api_id": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    }
+}

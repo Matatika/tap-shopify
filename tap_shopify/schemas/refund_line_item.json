@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "line_item_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "quantity": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "location_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "restock_type": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "subtotal": {
+            "type": [
+                "string",
+                "number",
+                "null"
+            ]
+        },
+        "total_tax": {
+            "type": [
+                "string",
+                "number",
+                "null"
+            ]
+        },
+        "line_item": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {},
+            "additionalProperties": true
+        }
+    }
+}

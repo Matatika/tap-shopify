@@ -1753,12 +1753,6 @@
                 "null"
             ]
         },
-        "merchant_of_record_app_id": {
-            "type": [
-                "string",
-                "null"
-            ]
-        },
         "original_total_additional_fees_set": {
             "type": [
                 "object",
