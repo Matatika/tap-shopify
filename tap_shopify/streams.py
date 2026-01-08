@@ -192,6 +192,32 @@ class ShippingLinesStream(tap_shopifyStream):
         return {}
 
 
+class TaxLinesStream(tap_shopifyStream):
+    """Tax lines stream (child of orders)."""
+
+    parent_stream_type = OrdersStream
+
+    name = "tax_lines"
+    path = "/orders/{order_id}.json"
+    records_jsonpath = "$.order.tax_lines[*]"
+    primary_keys = ["order_id", "title", "rate", "price"]
+    schema_filepath = SCHEMAS_DIR / "tax_line.json"
+
+    def get_url_params(self, context, next_page_token):
+        """Tax lines fetched per order; no pagination params."""
+        return {}
+
+    def post_process(self, row, context=None):
+        """Attach order context to each tax line."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["order_id"] = context["order_id"] if context else None
+        return row
+
+
 class ProductsStream(tap_shopifyStream):
     """Products stream."""
 

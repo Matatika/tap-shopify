@@ -22,6 +22,7 @@ from tap_shopify.streams import (
     RefundLineItemsStream,
     RefundsStream,
     ShippingLinesStream,
+    TaxLinesStream,
     TransactionsStream,
     UsersStream,
 )
@@ -38,6 +39,7 @@ STREAM_TYPES = [
     OrdersStream,
     LineItemsStream,
     ShippingLinesStream,
+    TaxLinesStream,
     RefundsStream,
     RefundLineItemsStream,
     OrderAdjustmentsStream,
