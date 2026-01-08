@@ -317,6 +317,16 @@ class RefundLineItemsStream(tap_shopifyStream):
         """Refund line items fetched per refund; no pagination params."""
         return {}
 
+    def post_process(self, row, context=None):
+        """Attach refund context to each refund line item."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["refund_id"] = context["refund_id"] if context else None
+        return row
+
 
 class OrderAdjustmentsStream(tap_shopifyStream):
     """Order adjustments stream (child of refunds)."""
