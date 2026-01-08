@@ -8,6 +8,12 @@
                 "null"
             ]
         },
+        "order_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
         "title": {
             "type": [
                 "string",

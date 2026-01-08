@@ -175,6 +175,16 @@ class LineItemsStream(tap_shopifyStream):
         """Line items fetched per order; no pagination or filtering params."""
         return {}
 
+    def post_process(self, row, context=None):
+        """Attach order context to each line item."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["order_id"] = context["order_id"] if context else None
+        return row
+
 
 class ShippingLinesStream(tap_shopifyStream):
     """Shipping lines stream (child of orders)."""
@@ -190,6 +200,16 @@ class ShippingLinesStream(tap_shopifyStream):
     def get_url_params(self, context, next_page_token):
         """Shipping lines fetched per order; no pagination params."""
         return {}
+
+    def post_process(self, row, context=None):
+        """Attach order context to each shipping line."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["order_id"] = context["order_id"] if context else None
+        return row
 
 
 class TaxLinesStream(tap_shopifyStream):
@@ -240,6 +260,16 @@ class TransactionsStream(tap_shopifyStream):
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "transaction.json"
 
+    def post_process(self, row, context=None):
+        """Attach order context to each transaction."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["order_id"] = context["order_id"] if context else None
+        return row
+
 
 class RefundsStream(tap_shopifyStream):
     """Refunds stream."""
@@ -260,6 +290,16 @@ class RefundsStream(tap_shopifyStream):
     def get_url_params(self, context, next_page_token):
         """Refunds are scoped to an order and do not support pagination params."""
         return {}
+
+    def post_process(self, row, context=None):
+        """Attach order context to each refund."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["order_id"] = context["order_id"] if context else None
+        return row
 
 
 class RefundLineItemsStream(tap_shopifyStream):
