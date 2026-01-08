@@ -80,6 +80,48 @@
                 "null"
             ]
         },
+        "tax_lines": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "price": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "rate": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    },
+                    "title": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "channel_liable": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    },
+                    "price_set": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "additionalProperties": true
+                    }
+                }
+            }
+        },
         "total_discount": {
             "type": [
                 "string",
