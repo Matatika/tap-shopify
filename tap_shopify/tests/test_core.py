@@ -34,8 +34,7 @@ class TestCore(unittest.TestCase):
         # given a mock response to the standard stream test
         responses.add(
             responses.GET,
-            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}"
-            "/orders.json?status=any",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/orders.json",
             json={},
             status=200,
         )
