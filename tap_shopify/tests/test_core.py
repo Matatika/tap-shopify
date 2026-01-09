@@ -25,7 +25,7 @@ class TestCore(unittest.TestCase):
         catalog = Tap_Shopify(config=self.mock_config).discover_streams()
 
         # expect valid catalog to be discovered
-        self.assertEqual(len(catalog), 11, "Total streams from default catalog")
+        self.assertEqual(len(catalog), 17, "Total streams from default catalog")
 
     # Run standard built-in tap tests from the SDK:
     @responses.activate()
