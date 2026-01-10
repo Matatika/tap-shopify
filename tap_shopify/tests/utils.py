@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from singer_sdk._singerlib.catalog import Catalog
+from singer_sdk.singerlib.catalog import Catalog
 from singer_sdk.helpers import _catalog
 
 from tap_shopify.tap import Tap_Shopify
