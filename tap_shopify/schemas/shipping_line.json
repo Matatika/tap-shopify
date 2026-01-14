@@ -2,19 +2,19 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
     "properties": {
-        "id": {
-            "type": [
-                "integer",
-                "null"
-            ]
-        },
         "order_id": {
             "type": [
                 "integer",
                 "null"
             ]
         },
-        "title": {
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "carrier_identifier": {
             "type": [
                 "string",
                 "null"
@@ -26,9 +26,63 @@
                 "null"
             ]
         },
-        "source": {
+        "discounted_price": {
             "type": [
                 "string",
+                "null"
+            ]
+        },
+        "discounted_price_set": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "shop_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "presentment_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "is_removed": {
+            "type": [
+                "boolean",
                 "null"
             ]
         },
@@ -44,13 +98,67 @@
                 "null"
             ]
         },
-        "discounted_price": {
+        "price_set": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "shop_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "presentment_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "requested_fulfillment_service_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "source": {
             "type": [
                 "string",
                 "null"
             ]
         },
-        "subtotal": {
+        "title": {
             "type": [
                 "string",
                 "null"
@@ -64,11 +172,65 @@
             "items": {
                 "type": "object",
                 "properties": {
+                    "channel_liable": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    },
                     "price": {
                         "type": [
                             "string",
                             "null"
                         ]
+                    },
+                    "price_set": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "shop_money": {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    },
+                                    "currency_code": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    }
+                                }
+                            },
+                            "presentment_money": {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    },
+                                    "currency_code": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
                     },
                     "rate": {
                         "type": [
@@ -91,32 +253,70 @@
                 "null"
             ],
             "items": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "amount_set": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "shop_money": {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    },
+                                    "currency_code": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    }
+                                }
+                            },
+                            "presentment_money": {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    },
+                                    "currency_code": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "discount_application_index": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    }
+                }
             }
-        },
-        "requested_fulfillment_service_id": {
-            "type": [
-                "integer",
-                "null"
-            ]
-        },
-        "carrier_identifier": {
-            "type": [
-                "string",
-                "null"
-            ]
-        },
-        "delivery_category": {
-            "type": [
-                "string",
-                "null"
-            ]
-        },
-        "admin_graphql_api_id": {
-            "type": [
-                "string",
-                "null"
-            ]
         }
     }
 }

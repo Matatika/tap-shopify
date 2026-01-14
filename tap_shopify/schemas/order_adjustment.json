@@ -8,9 +8,75 @@
                 "null"
             ]
         },
+        "amount": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "amount_set": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "shop_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "presentment_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "kind": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
         "order_id": {
             "type": [
                 "integer",
+                "null"
+            ]
+        },
+        "reason": {
+            "type": [
+                "string",
                 "null"
             ]
         },
@@ -20,29 +86,59 @@
                 "null"
             ]
         },
-        "amount": {
-            "type": [
-                "string",
-                "null"
-            ]
-        },
         "tax_amount": {
             "type": [
                 "string",
                 "null"
             ]
         },
-        "kind": {
+        "tax_amount_set": {
             "type": [
-                "string",
+                "object",
                 "null"
-            ]
-        },
-        "reason": {
-            "type": [
-                "string",
-                "null"
-            ]
+            ],
+            "properties": {
+                "shop_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "presentment_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
         }
     }
 }
