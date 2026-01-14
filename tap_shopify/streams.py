@@ -3,6 +3,7 @@
 from decimal import Decimal
 from pathlib import Path
 
+from tap_shopify import hiddendict
 from tap_shopify.client import tap_shopifyStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -149,7 +150,7 @@ class OrdersStream(tap_shopifyStream):
         """Return a context dictionary for child streams."""
         return {
             "order_id": record["id"],
-            "order": record,
+            "order": hiddendict(record),
         }
 
     def get_url_params(self, context, next_page_token):
@@ -244,7 +245,7 @@ class RefundsStream(_OrderEmbeddedStream):
         """Pass refund context to child streams."""
         return {
             "refund_id": record["id"],
-            "refund": record,
+            "refund": hiddendict(record),
         }
 
 
