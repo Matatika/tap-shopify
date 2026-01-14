@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "module": "tap_shopify.tap",
+            "program": "tap_shopify",
             "justMyCode": false,
             "args": [
                 "--config",
