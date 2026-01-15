@@ -136,6 +136,7 @@ class OrdersStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = "updated_at"
     schema_filepath = SCHEMAS_DIR / "order.json"
+    is_sorted = True
 
     def post_process(self, row, context=None):
         """Perform syntactic transformations only."""
@@ -160,6 +161,7 @@ class OrdersStream(tap_shopifyStream):
 
         if not next_page_token:
             params["status"] = "any"
+            params["order"] = f"{self.replication_key} asc"
 
         return params
 
