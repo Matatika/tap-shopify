@@ -1,10 +1,9 @@
 """REST client handling, including tap_shopifyStream base class."""
 
 from pathlib import Path
-from typing import Any, Optional
-from urllib.parse import parse_qsl, urlsplit
+from urllib.parse import parse_qsl
 
-import requests
+from singer_sdk.pagination import HeaderLinkPaginator
 from singer_sdk.streams import RESTStream
 
 from tap_shopify.auth import tap_shopifyAuthenticator
@@ -47,23 +46,16 @@ class tap_shopifyStream(RESTStream):
             headers["User-Agent"] = self.config.get("user_agent")
         return headers
 
-    def get_next_page_token(
-        self, response: requests.Response, previous_token: Optional[Any]
-    ) -> Optional[Any]:
-        """Return a token for identifying next page or None if no more pages."""
-        next_link = response.links.get("next")
-        if not next_link or not response.json():
-            self.last_id = None
-            return None
-
-        return next_link["url"]
+    def get_new_paginator(self):
+        """Return a new paginator instance."""
+        return HeaderLinkPaginator()
 
     def get_url_params(self, context, next_page_token):
         """Return a dictionary of values to be used in URL parameterization."""
         params: dict = {}
 
         if next_page_token:
-            return dict(parse_qsl(urlsplit(next_page_token).query))
+            return dict(parse_qsl(next_page_token.query))
 
         context_state = self.get_context_state(context)
         last_updated = context_state.get("replication_key_value")
