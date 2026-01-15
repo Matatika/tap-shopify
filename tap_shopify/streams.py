@@ -241,7 +241,6 @@ class RefundsStream(_OrderEmbeddedStream):
 
     name = "refunds"
     primary_keys = ["id"]
-    replication_key = "created_at"
     schema_filepath = SCHEMAS_DIR / "refund.json"
 
     def get_child_context(self, record, context):
