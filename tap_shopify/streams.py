@@ -168,7 +168,7 @@ class OrdersStream(tap_shopifyStream):
 
 class _OrderEmbeddedStream(tap_shopifyStream):
     parent_stream_type = OrdersStream
-    state_partitioning_keys = ["order_id"]
+    state_partitioning_keys = []  # do not store any state bookmarks
 
     def get_records(self, context):
         yield from context["order"][self.name]
@@ -223,6 +223,7 @@ class TransactionsStream(tap_shopifyStream):
     records_jsonpath = "$.transactions[*]"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "transaction.json"
+    state_partitioning_keys = []
 
     def post_process(self, row, context=None):
         """Attach order context to each transaction."""
@@ -240,7 +241,6 @@ class RefundsStream(_OrderEmbeddedStream):
 
     name = "refunds"
     primary_keys = ["id"]
-    replication_key = "created_at"
     schema_filepath = SCHEMAS_DIR / "refund.json"
 
     def get_child_context(self, record, context):
@@ -253,7 +253,7 @@ class RefundsStream(_OrderEmbeddedStream):
 
 class _RefundEmbeddedStream(tap_shopifyStream):
     parent_stream_type = RefundsStream
-    state_partitioning_keys = ["refund_id"]
+    state_partitioning_keys = []  # do not store any state bookmarks
 
     def get_records(self, context):
         yield from context["refund"][self.name]
