@@ -168,7 +168,7 @@ class OrdersStream(tap_shopifyStream):
 
 class _OrderEmbeddedStream(tap_shopifyStream):
     parent_stream_type = OrdersStream
-    state_partitioning_keys = ["order_id"]
+    state_partitioning_keys = []  # do not store any state bookmarks
 
     def get_records(self, context):
         yield from context["order"][self.name]
@@ -253,7 +253,7 @@ class RefundsStream(_OrderEmbeddedStream):
 
 class _RefundEmbeddedStream(tap_shopifyStream):
     parent_stream_type = RefundsStream
-    state_partitioning_keys = ["refund_id"]
+    state_partitioning_keys = []  # do not store any state bookmarks
 
     def get_records(self, context):
         yield from context["refund"][self.name]
