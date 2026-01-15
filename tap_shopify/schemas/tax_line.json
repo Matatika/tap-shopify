@@ -8,12 +8,6 @@
                 "null"
             ]
         },
-        "title": {
-            "type": [
-                "string",
-                "null"
-            ]
-        },
         "price": {
             "type": [
                 "string",
@@ -26,15 +20,9 @@
                 "null"
             ]
         },
-        "rate_percentage": {
+        "title": {
             "type": [
-                "number",
-                "null"
-            ]
-        },
-        "channel_liable": {
-            "type": [
-                "boolean",
+                "string",
                 "null"
             ]
         },
@@ -85,6 +73,12 @@
                     }
                 }
             }
+        },
+        "channel_liable": {
+            "type": [
+                "boolean",
+                "null"
+            ]
         }
     }
 }

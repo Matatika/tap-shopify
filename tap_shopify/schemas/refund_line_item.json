@@ -20,13 +20,13 @@
                 "null"
             ]
         },
-        "quantity": {
+        "location_id": {
             "type": [
                 "integer",
                 "null"
             ]
         },
-        "location_id": {
+        "quantity": {
             "type": [
                 "integer",
                 "null"
@@ -40,17 +40,111 @@
         },
         "subtotal": {
             "type": [
-                "string",
                 "number",
                 "null"
             ]
         },
+        "subtotal_set": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "shop_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "presentment_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "total_tax": {
             "type": [
-                "string",
                 "number",
                 "null"
             ]
+        },
+        "total_tax_set": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "shop_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                },
+                "presentment_money": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "amount": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "currency_code": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    }
+                }
+            }
         },
         "line_item": {
             "type": [
