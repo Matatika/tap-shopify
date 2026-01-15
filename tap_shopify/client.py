@@ -47,6 +47,7 @@ class tap_shopifyStream(RESTStream):
         return headers
 
     def get_new_paginator(self):
+        """Return a new paginator instance."""
         return HeaderLinkPaginator()
 
     def get_url_params(self, context, next_page_token):
