@@ -223,6 +223,7 @@ class TransactionsStream(tap_shopifyStream):
     records_jsonpath = "$.transactions[*]"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "transaction.json"
+    state_partitioning_keys = []
 
     def post_process(self, row, context=None):
         """Attach order context to each transaction."""
