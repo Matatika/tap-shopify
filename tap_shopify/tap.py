@@ -25,6 +25,8 @@ from tap_shopify.streams import (
     TaxLinesStream,
     TransactionsStream,
     UsersStream,
+    OrderDiscountCodesStream,
+    GiftCardsStream,
 )
 
 STREAM_TYPES = [
@@ -45,6 +47,8 @@ STREAM_TYPES = [
     OrderAdjustmentsStream,
     ProductsStream,
     TransactionsStream,
+    OrderDiscountCodesStream,
+    GiftCardsStream,
 ]
 
 

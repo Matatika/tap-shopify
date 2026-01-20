@@ -287,3 +287,28 @@ class UsersStream(tap_shopifyStream):
     records_jsonpath = "$.users[*]"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "user.json"
+
+class OrderDiscountCodesStream(_OrderEmbeddedStream):
+    """Order discounts stream (child of orders)."""
+
+    name = "order_discount_codes"
+    primary_keys = ["order_id", "index"]
+    schema_filepath = SCHEMAS_DIR / "order_discount_codes.json"
+
+    def get_records(self, context):
+        """Yield each discount code with a 1-based index per order."""
+        discount_codes = context["order"].get("discount_codes") or []
+        for idx, code in enumerate(discount_codes, start=1):
+            if not code:
+                continue
+            yield {**code, "index": idx}
+
+class GiftCardsStream(tap_shopifyStream):
+    """Gift cards stream."""
+
+    name = "gift_cards"
+    path = "/gift_cards.json"
+    records_jsonpath = "$.gift_cards[*]"
+    primary_keys = ["id"]
+    replication_key = "updated_at"
+    schema_filepath = SCHEMAS_DIR / "gift_cards.json"
