@@ -24,7 +24,7 @@ pydocstyle = "^6.1.1"
 mypy = "^1.19"
 types-requests = "^2.32.4"
 isort = "^6.1.0"
-responses = "0.25.8"
+responses = "0.26.0"
 
 [tool.isort]
 profile = "black"
