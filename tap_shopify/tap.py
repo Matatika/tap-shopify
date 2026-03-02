@@ -11,12 +11,14 @@ from tap_shopify.streams import (
     CollectStream,
     CustomCollections,
     CustomersStream,
+    GiftCardsStream,
     InventoryItemsStream,
     InventoryLevelsStream,
     LineItemsStream,
     LocationsStream,
     MetafieldsStream,
     OrderAdjustmentsStream,
+    OrderDiscountCodesStream,
     OrdersStream,
     ProductsStream,
     RefundLineItemsStream,
@@ -25,8 +27,6 @@ from tap_shopify.streams import (
     TaxLinesStream,
     TransactionsStream,
     UsersStream,
-    OrderDiscountCodesStream,
-    GiftCardsStream,
 )
 
 STREAM_TYPES = [
