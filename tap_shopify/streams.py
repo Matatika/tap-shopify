@@ -288,6 +288,7 @@ class UsersStream(tap_shopifyStream):
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "user.json"
 
+
 class OrderDiscountCodesStream(_OrderEmbeddedStream):
     """Order discounts stream (child of orders)."""
 
@@ -302,6 +303,7 @@ class OrderDiscountCodesStream(_OrderEmbeddedStream):
             if not code:
                 continue
             yield {**code, "index": idx}
+
 
 class GiftCardsStream(tap_shopifyStream):
     """Gift cards stream."""
