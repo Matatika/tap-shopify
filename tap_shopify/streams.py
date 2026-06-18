@@ -338,10 +338,10 @@ class ShopifyQLStream(tap_shopifyStream):
     -----------------------------------------------------------------------
     How ShopifyQL responses are handled
     -----------------------------------------------------------------------
-    The Shopify shopifyqlQuery API returns tabular data: a `columns` array
-    of {name, dataType} objects and a `rowData` array of string arrays.
-    Every value — numbers, dates, booleans — comes back as a plain string.
-    This class zips column names with row values so each record looks like:
+    The Shopify shopifyqlQuery API (2026-04+) returns tabular data: a
+    `columns` array of {name, dataType} objects and a `rows` array of
+    already-keyed objects. Every value — numbers, dates, booleans — comes
+    back as a plain string. Each record looks like:
 
         {"day": "2024-01-15", "total_sales": "1234.56", ...}
 
@@ -374,16 +374,12 @@ class ShopifyQLStream(tap_shopifyStream):
     # Never set this on the base class itself.
     _configured_query: str = ""
 
-    # GraphQL wrapper for the shopifyqlQuery field.
+    # GraphQL wrapper for the shopifyqlQuery field (API 2026-04+).
     # Double-braces {{ }} are literal braces in the formatted output.
     _GRAPHQL_TEMPLATE = (
         "{{ shopifyqlQuery(query: {shopifyql}) {{"
-        " ... on TableResponse {{"
-        "  tableData {{ unformattedData {{"
-        "   columns {{ name dataType columnType }} rowData"
-        "  }} }}"
-        " }}"
-        " parseErrors {{ code message }}"
+        " parseErrors"
+        " tableData {{ columns {{ name dataType }} rows }}"
         "}} }}"
     )
 
@@ -410,12 +406,9 @@ class ShopifyQLStream(tap_shopifyStream):
                 f"ShopifyQL parse error in stream '{self.name}': {parse_errors}"
             )
 
-        unformatted = (
-            (result.get("tableData") or {}).get("unformattedData") or {}
-        )
-        columns = [col["name"] for col in unformatted.get("columns") or []]
-        for row in unformatted.get("rowData") or []:
-            yield dict(zip(columns, row))
+        table_data = result.get("tableData") or {}
+        for row in table_data.get("rows") or []:
+            yield row
 
     def get_new_paginator(self):
         """ShopifyQL returns all rows in a single response — no pagination."""

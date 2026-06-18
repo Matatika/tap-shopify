@@ -9,7 +9,7 @@ from singer_sdk.streams import RESTStream
 from tap_shopify.auth import tap_shopifyAuthenticator
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
-API_VERSION = "2025-01"
+API_VERSION = "2026-04"
 
 
 class tap_shopifyStream(RESTStream):
