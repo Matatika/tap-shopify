@@ -1,5 +1,6 @@
 """Stream type classes for tap-shopify."""
 
+import json
 from decimal import Decimal
 from pathlib import Path
 
@@ -314,3 +315,116 @@ class GiftCardsStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = "updated_at"
     schema_filepath = SCHEMAS_DIR / "gift_cards.json"
+
+
+class ShopifyQLStream(tap_shopifyStream):
+    """Base class for config-driven ShopifyQL query streams.
+
+    -----------------------------------------------------------------------
+    DO NOT instantiate or modify this class directly.
+    -----------------------------------------------------------------------
+
+    Streams are created at runtime from the `shopifyql_queries` list in the
+    tap config. Each entry in that list produces one stream (one table in
+    your destination). To add a new ShopifyQL report:
+
+      1. Add an entry to `shopifyql_queries` in meltano.yml (see tap.py for
+         the full config schema and field descriptions).
+      2. Run `meltano run tap-shopify target-...` — the new table appears
+         automatically.
+
+    No changes to this file are needed.
+
+    -----------------------------------------------------------------------
+    How ShopifyQL responses are handled
+    -----------------------------------------------------------------------
+    The Shopify shopifyqlQuery API returns tabular data: a `columns` array
+    of {name, dataType} objects and a `rowData` array of string arrays.
+    Every value — numbers, dates, booleans — comes back as a plain string.
+    This class zips column names with row values so each record looks like:
+
+        {"day": "2024-01-15", "total_sales": "1234.56", ...}
+
+    Type casting (string → float, string → date, etc.) should be done in
+    the downstream dbt model or transformation layer, NOT here.
+
+    -----------------------------------------------------------------------
+    Primary keys and TOTALS rows
+    -----------------------------------------------------------------------
+    Queries that use `TIMESERIES day` produce one row per calendar day.
+    Queries that also use `WITH TOTALS` append summary rows at the end where
+    `day` is null. If your destination rejects null primary keys, add a
+    filter to your `primary_keys` or set them to a composite key that
+    uniquely identifies each row including summary rows.
+
+    `COMPARE TO previous_period` may add a period-indicator column (e.g.
+    `comparison_label`) — include it in `primary_keys` if needed to keep
+    rows unique.
+    """
+
+    # Set by the dynamic subclass created in tap.py — do not change here.
+    name = "shopifyql"
+    primary_keys = ["day"]
+    replication_key = None  # ShopifyQL is always a full refresh
+    schema_filepath = SCHEMAS_DIR / "shopifyql.json"
+    http_method = "POST"
+    path = "/graphql.json"
+
+    # The ShopifyQL query string, injected per dynamic subclass.
+    # Never set this on the base class itself.
+    _configured_query: str = ""
+
+    # GraphQL wrapper for the shopifyqlQuery field.
+    # Double-braces {{ }} are literal braces in the formatted output.
+    _GRAPHQL_TEMPLATE = (
+        "{{ shopifyqlQuery(query: {shopifyql}) {{"
+        " ... on TableResponse {{"
+        "  tableData {{ unformattedData {{"
+        "   columns {{ name dataType columnType }} rowData"
+        "  }} }}"
+        " }}"
+        " parseErrors {{ code message }}"
+        "}} }}"
+    )
+
+    def prepare_request_payload(self, context, next_page_token):
+        """Build the GraphQL POST body, embedding the ShopifyQL query as a JSON string."""
+        graphql = self._GRAPHQL_TEMPLATE.format(
+            shopifyql=json.dumps(self._configured_query)
+        )
+        return {"query": graphql}
+
+    def parse_response(self, response):
+        """Unpack the tabular ShopifyQL response into one dict per row."""
+        data = response.json()
+
+        gql_errors = data.get("errors")
+        if gql_errors:
+            raise RuntimeError(f"GraphQL errors: {gql_errors}")
+
+        result = (data.get("data") or {}).get("shopifyqlQuery") or {}
+
+        parse_errors = result.get("parseErrors") or []
+        if parse_errors:
+            raise RuntimeError(
+                f"ShopifyQL parse error in stream '{self.name}': {parse_errors}"
+            )
+
+        unformatted = (
+            (result.get("tableData") or {}).get("unformattedData") or {}
+        )
+        columns = [col["name"] for col in unformatted.get("columns") or []]
+        for row in unformatted.get("rowData") or []:
+            yield dict(zip(columns, row))
+
+    def get_new_paginator(self):
+        """ShopifyQL returns all rows in a single response — no pagination."""
+        return None
+
+    def get_url_params(self, context, next_page_token):
+        """No query-string params needed; the query goes in the POST body."""
+        return {}
+
+    def post_process(self, row, context=None):
+        """Return the row as-is — deduplication is not applicable here."""
+        return row
