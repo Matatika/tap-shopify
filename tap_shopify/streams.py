@@ -1,8 +1,11 @@
 """Stream type classes for tap-shopify."""
 
 import json
+import re
 from decimal import Decimal
+from functools import cached_property
 from pathlib import Path
+from typing import Optional
 
 from tap_shopify import hiddendict
 from tap_shopify.client import tap_shopifyStream
@@ -317,62 +320,115 @@ class GiftCardsStream(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "gift_cards.json"
 
 
+def _shopifyql_schema(query: str) -> dict:
+    """Build a Singer schema by parsing the ShopifyQL query structure.
+
+    All values come back from the API as strings (numbers, dates, nulls
+    included), so every column is typed as string|null. The derived columns
+    produced by WITH TOTALS, COMPARE TO, and WITH PERCENT_CHANGE are
+    deterministic from the query text and are enumerated explicitly so that
+    database targets (e.g. target-bigquery) can create the correct columns.
+    """
+    from singer_sdk import typing as th
+
+    nullable_string = th.CustomType({"type": ["string", "null"]})
+
+    def prop(name: str) -> th.Property:
+        return th.Property(name, nullable_string)
+
+    props = []
+
+    # TIMESERIES <dimension> — the time-bucketing column (e.g. "day")
+    ts_match = re.search(r"\bTIMESERIES\s+(\w+)", query, re.IGNORECASE)
+    ts_col = ts_match.group(1).lower() if ts_match else None
+    if ts_col:
+        props.append(prop(ts_col))
+
+    # SHOW <field>, <field>, ... — the metric columns
+    show_match = re.search(
+        r"\bSHOW\b\s+(.*?)(?=\s+\b(?:TIMESERIES|WHERE|SINCE|UNTIL|ORDER|LIMIT|VISUALIZE|GROUP|COMPARE)\b|$)",
+        query,
+        re.IGNORECASE | re.DOTALL,
+    )
+    show_fields = []
+    if show_match:
+        show_fields = [f.strip().lower() for f in show_match.group(1).split(",") if f.strip()]
+    for field in show_fields:
+        props.append(prop(field))
+
+    # COMPARE TO <period> — adds comparison_<col>__<period> for every base column
+    compare_match = re.search(r"\bCOMPARE\s+TO\s+([\w_]+)", query, re.IGNORECASE)
+    period = compare_match.group(1).lower() if compare_match else None
+    if period:
+        if ts_col:
+            props.append(prop(f"comparison_{ts_col}__{period}"))
+        for field in show_fields:
+            props.append(prop(f"comparison_{field}__{period}"))
+
+    # WITH PERCENT_CHANGE — adds percent_change_<field>__<period> for metric columns
+    has_pct = bool(re.search(r"\bPERCENT_CHANGE\b", query, re.IGNORECASE))
+    if has_pct and period:
+        for field in show_fields:
+            props.append(prop(f"percent_change_{field}__{period}"))
+
+    # WITH TOTALS — appends __totals to every column variant defined above
+    if re.search(r"\bTOTALS\b", query, re.IGNORECASE):
+        for field in show_fields:
+            props.append(prop(f"{field}__totals"))
+        if period:
+            if ts_col:
+                props.append(prop(f"comparison_{ts_col}__{period}__totals"))
+            for field in show_fields:
+                props.append(prop(f"comparison_{field}__{period}__totals"))
+            if has_pct:
+                for field in show_fields:
+                    props.append(prop(f"percent_change_{field}__{period}__totals"))
+
+    return th.PropertiesList(*props).to_dict()
+
+
 class ShopifyQLStream(tap_shopifyStream):
     """Base class for config-driven ShopifyQL query streams.
 
-    -----------------------------------------------------------------------
-    DO NOT instantiate or modify this class directly.
-    -----------------------------------------------------------------------
+    Instantiate via tap.py by passing the query config entry as a kwarg:
 
-    Streams are created at runtime from the `shopifyql_queries` list in the
-    tap config. Each entry in that list produces one stream (one table in
-    your destination). To add a new ShopifyQL report:
+        ShopifyQLStream(tap=self, query=entry)
 
-      1. Add an entry to `shopifyql_queries` in meltano.yml (see tap.py for
-         the full config schema and field descriptions).
-      2. Run `meltano run tap-shopify target-...` — the new table appears
-         automatically.
-
-    No changes to this file are needed.
+    where `entry` is a dict with keys `name`, `query`, and optionally
+    `primary_keys`. One instance = one destination table.
 
     -----------------------------------------------------------------------
-    How ShopifyQL responses are handled
+    Adding a new ShopifyQL report
     -----------------------------------------------------------------------
-    The Shopify shopifyqlQuery API (2026-04+) returns tabular data: a
-    `columns` array of {name, dataType} objects and a `rows` array of
-    already-keyed objects. Every value — numbers, dates, booleans — comes
-    back as a plain string. Each record looks like:
-
-        {"day": "2024-01-15", "total_sales": "1234.56", ...}
-
-    Type casting (string → float, string → date, etc.) should be done in
-    the downstream dbt model or transformation layer, NOT here.
+    Add an entry to `shopifyql_queries` in meltano.yml (see tap.py for the
+    full config schema). No changes to this file are needed.
 
     -----------------------------------------------------------------------
-    Primary keys and TOTALS rows
+    Schema discovery
     -----------------------------------------------------------------------
-    Queries that use `TIMESERIES day` produce one row per calendar day.
-    Queries that also use `WITH TOTALS` append summary rows at the end where
-    `day` is null. If your destination rejects null primary keys, add a
-    filter to your `primary_keys` or set them to a composite key that
-    uniquely identifies each row including summary rows.
+    The Singer schema is built dynamically from the query text. The SHOW
+    clause, TIMESERIES dimension, COMPARE TO period, WITH TOTALS, and WITH
+    PERCENT_CHANGE modifiers are parsed to enumerate every column that the
+    API will return. All values are typed as string|null (Shopify returns
+    everything as strings — cast to numeric/date types in dbt).
 
-    `COMPARE TO previous_period` may add a period-indicator column (e.g.
-    `comparison_label`) — include it in `primary_keys` if needed to keep
-    rows unique.
+    -----------------------------------------------------------------------
+    Incremental sync
+    -----------------------------------------------------------------------
+    If the query contains a TIMESERIES clause, the TIMESERIES column (e.g.
+    "day") is used as the replication key. On subsequent runs the SINCE
+    clause in the query is replaced with the last synced value from state,
+    so only new rows are fetched. On the first run the query is used as-is.
+
+    Queries without a TIMESERIES clause are always full-refresh.
     """
 
-    # Set by the dynamic subclass created in tap.py — do not change here.
     name = "shopifyql"
     primary_keys = ["day"]
-    replication_key = None  # ShopifyQL is always a full refresh
-    schema_filepath = SCHEMAS_DIR / "shopifyql.json"
+    schema_filepath = None  # schema is built dynamically in __init__
     http_method = "POST"
     path = "/graphql.json"
-
-    # The ShopifyQL query string, injected per dynamic subclass.
-    # Never set this on the base class itself.
-    _configured_query: str = ""
+    is_sorted = True  # TIMESERIES queries return rows sorted by date ASC
 
     # GraphQL wrapper for the shopifyqlQuery field (API 2026-04+).
     # Double-braces {{ }} are literal braces in the formatted output.
@@ -383,11 +439,41 @@ class ShopifyQLStream(tap_shopifyStream):
         "}} }}"
     )
 
+    def __init__(self, *args, **kwargs):
+        query_entry = kwargs.pop("query")
+        self.name = query_entry["name"]
+        self.primary_keys = query_entry.get("primary_keys") or ["day"]
+        self._configured_query = query_entry["query"]
+
+        # Use the TIMESERIES column as replication key for incremental syncs.
+        # Queries without TIMESERIES are full-refresh (replication_key = None).
+        ts_match = re.search(r"\bTIMESERIES\s+(\w+)", self._configured_query, re.IGNORECASE)
+        self.replication_key = ts_match.group(1).lower() if ts_match else None
+
+        super().__init__(*args, **kwargs)
+
+    @cached_property
+    def schema(self) -> dict:
+        return _shopifyql_schema(self._configured_query)
+
     def prepare_request_payload(self, context, next_page_token):
-        """Build the GraphQL POST body, embedding the ShopifyQL query as a JSON string."""
-        graphql = self._GRAPHQL_TEMPLATE.format(
-            shopifyql=json.dumps(self._configured_query)
-        )
+        """Build the GraphQL POST body, injecting state into the SINCE clause."""
+        query = self._configured_query
+
+        # On incremental runs, replace the SINCE expression with the last
+        # synced replication key value so only new rows are fetched.
+        if self.replication_key:
+            state = self.get_context_state(context)
+            since_date = state.get("replication_key_value")
+            if since_date:
+                query = re.sub(
+                    r"\bSINCE\s+\S+",
+                    f"SINCE {since_date}",
+                    query,
+                    flags=re.IGNORECASE,
+                )
+
+        graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(query))
         return {"query": graphql}
 
     def parse_response(self, response):

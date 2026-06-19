@@ -196,17 +196,6 @@ class Tap_Shopify(Tap):
         streams = [cls(tap=self) for cls in stream_classes]
 
         for entry in self.config.get("shopifyql_queries") or []:
-            # Build a unique subclass per query so each has its own name,
-            # primary_keys, and query string as class-level attributes.
-            DynamicStream = type(
-                f"ShopifyQL_{entry['name']}",
-                (ShopifyQLStream,),
-                {
-                    "name": entry["name"],
-                    "primary_keys": entry.get("primary_keys") or ["day"],
-                    "_configured_query": entry["query"],
-                },
-            )
-            streams.append(DynamicStream(tap=self))
+            streams.append(ShopifyQLStream(tap=self, query=entry))
 
         return streams
