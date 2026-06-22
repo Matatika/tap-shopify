@@ -1182,6 +1182,94 @@
                         "object",
                         "null"
                     ]
+                },
+                "orders_count": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "total_spent": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "last_order_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "last_order_name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "email_marketing_consent": {
+                    "properties": {
+                        "state": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "opt_in_level": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "consent_updated_at": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    },
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "sms_marketing_consent": {
+                    "properties": {
+                        "consent_collected_from": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "consent_updated_at": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "opt_in_level": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "state": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        }
+                    },
+                    "type": [
+                        "object",
+                        "null"
+                    ]
                 }
             },
             "type": [
