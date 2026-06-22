@@ -361,7 +361,10 @@ class ShopifyQLStream(tap_shopifyStream):
     schema_filepath = None  # schema is discovered dynamically via API
     http_method = "POST"
     path = "/graphql.json"
-    is_sorted = True  # TIMESERIES queries return rows sorted by date ASC
+
+    @property
+    def is_sorted(self) -> bool:
+        return bool(self.replication_key)
 
     # GraphQL wrapper for the shopifyqlQuery field (API 2025-10+).
     # Double-braces {{ }} are literal braces in the formatted output.
@@ -376,13 +379,8 @@ class ShopifyQLStream(tap_shopifyStream):
         query_entry = kwargs.pop("query")
         self.name = query_entry["name"]
         self._configured_query = query_entry["query"]
-
-        # Use the TIMESERIES column as replication key for incremental syncs.
-        # Queries without TIMESERIES are full-refresh (replication_key = None).
-        ts_match = re.search(r"\bTIMESERIES\s+(\w+)", self._configured_query, re.IGNORECASE)
-        ts_col = ts_match.group(1).lower() if ts_match else None
-        self.replication_key = ts_col
-        self.primary_keys = query_entry.get("primary_keys") or ([ts_col] if ts_col else [])
+        self.primary_keys = query_entry.get("primary_keys") or []
+        self.replication_key = query_entry.get("replication_key")
 
         super().__init__(*args, **kwargs)
 
@@ -402,7 +400,7 @@ class ShopifyQLStream(tap_shopifyStream):
         response.raise_for_status()
         data = response.json()
 
-        result = (data.get("data") or {}).get("shopifyqlQuery") or {}
+        result = data.get("shopifyqlQuery") or {}
         parse_errors = result.get("parseErrors") or []
         if parse_errors:
             raise RuntimeError(
@@ -417,21 +415,20 @@ class ShopifyQLStream(tap_shopifyStream):
         """Build the GraphQL POST body, injecting state into the SINCE clause."""
         query = self._configured_query
 
-        # On incremental runs, update SINCE with the last synced replication
-        # key value — replace if present, append if absent.
-        if self.replication_key:
-            state = self.get_context_state(context)
-            since_date = state.get("replication_key_value")
-            if since_date:
-                if re.search(r"\bSINCE\b", query, re.IGNORECASE):
-                    query = re.sub(
-                        r"\bSINCE\s+\S+",
-                        f"SINCE {since_date}",
-                        query,
-                        flags=re.IGNORECASE,
-                    )
-                else:
-                    query = query.rstrip() + f" SINCE {since_date}"
+        # Inject or replace SINCE using the starting timestamp, which resolves
+        # to the last state value on incremental runs or start_date on first run.
+        starting_ts = self.get_starting_timestamp(context)
+        if starting_ts:
+            since_date = starting_ts.date().isoformat()
+            if re.search(r"\bSINCE\b", query, re.IGNORECASE):
+                query = re.sub(
+                    r"\bSINCE\s+\S+",
+                    f"SINCE {since_date}",
+                    query,
+                    flags=re.IGNORECASE,
+                )
+            else:
+                query = query.rstrip() + f" SINCE {since_date}"
 
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(query))
         return {"query": graphql}
@@ -444,7 +441,7 @@ class ShopifyQLStream(tap_shopifyStream):
         if gql_errors:
             raise RuntimeError(f"GraphQL errors: {gql_errors}")
 
-        result = (data.get("data") or {}).get("shopifyqlQuery") or {}
+        result = data.get("shopifyqlQuery") or {}
 
         parse_errors = result.get("parseErrors") or []
         if parse_errors:

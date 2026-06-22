@@ -143,15 +143,24 @@ class Tap_Shopify(Tap):
                         th.ArrayType(th.StringType),
                         description=(
                             "List of column names that uniquely identify a row. "
-                            "Defaults to ['day'] if omitted, which is correct for "
-                            "most TIMESERIES queries without COMPARE TO. "
-                            "If your query uses COMPARE TO previous_period, the "
-                            "same day appears in both periods — add the "
-                            "period-indicator column here to avoid collisions "
-                            "(e.g. ['day', 'comparison_label']). "
-                            "If your query has no time dimension at all, set this "
-                            "to a column that is unique per row, or omit it and "
-                            "accept that the destination will upsert on 'day'."
+                            "Required for destinations that need a primary key "
+                            "(e.g. target-bigquery). "
+                            "Example: ['day'] for a simple TIMESERIES query, or "
+                            "['day', 'comparison_label'] if COMPARE TO is used."
+                        ),
+                    ),
+                    th.Property(
+                        "replication_key",
+                        th.StringType,
+                        description=(
+                            "Column name to use as the replication key for "
+                            "incremental syncs. When set, the tap reads the last "
+                            "synced value from state and injects or replaces the "
+                            "SINCE clause in the query on subsequent runs. "
+                            "Omit for full-refresh streams. "
+                            "Should match the replication-key set in Meltano "
+                            "stream metadata. "
+                            "Example: 'day' for a TIMESERIES day query."
                         ),
                     ),
                 )
@@ -160,8 +169,8 @@ class Tap_Shopify(Tap):
                 "List of ShopifyQL queries to sync as individual streams. "
                 "Each entry produces one table in your destination. "
                 "Add as many entries as needed — no code changes are required. "
-                "See the 'name', 'query', and 'primary_keys' field descriptions "
-                "for full details on each property. "
+                "See the 'name', 'query', 'primary_keys', and 'replication_key' "
+                "field descriptions for full details on each property. "
                 "Example meltano.yml config:\n"
                 "  shopifyql_queries:\n"
                 "    - name: sales_over_time\n"
