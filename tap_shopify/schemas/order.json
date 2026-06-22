@@ -1007,9 +1007,6 @@
                         "null"
                     ]
                 },
-                "accepts_marketing": {
-                    "type": "boolean"
-                },
                 "created_at": {
                     "type": [
                         "string",
@@ -1034,25 +1031,7 @@
                         "null"
                     ]
                 },
-                "orders_count": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
-                },
                 "state": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "total_spent": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "last_order_id": {
                     "type": [
                         "string",
                         "null"
@@ -1082,31 +1061,7 @@
                         "null"
                     ]
                 },
-                "tags": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "last_order_name": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
                 "currency": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "accepts_marketing_updated_at": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "marketing_opt_in_level": {
                     "type": [
                         "string",
                         "null"
@@ -1114,64 +1069,6 @@
                 },
                 "tax_exemptions": {
                     "type": "array"
-                },
-                "sms_marketing_consent": {
-                    "properties": {
-                        "consent_collected_from": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        },
-                        "consent_updated_at": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        },
-                        "opt_in_level": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        },
-                        "state": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        }
-                    },
-                    "type": [
-                        "object",
-                        "null"
-                    ]
-                },
-                "email_marketing_consent": {
-                    "properties": {
-                        "state": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        },
-                        "opt_in_level": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        },
-                        "consent_updated_at": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        }
-                    },
-                    "type": [
-                        "object",
-                        "null"
-                    ]
                 },
                 "admin_graphql_api_id": {
                     "type": [
