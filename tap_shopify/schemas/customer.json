@@ -14,9 +14,6 @@
                 "null"
             ]
         },
-        "accepts_marketing": {
-            "type": "boolean"
-        },
         "created_at": {
             "type": [
                 "string",
@@ -213,18 +210,6 @@
                 }
             },
             "type": "array"
-        },
-        "accepts_marketing_updated_at": {
-            "type": [
-                "string",
-                "null"
-            ]
-        },
-        "marketing_opt_in_level": {
-            "type": [
-                "string",
-                "null"
-            ]
         },
         "tax_exemptions": {
             "items": {},
