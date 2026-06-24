@@ -25,7 +25,7 @@ class TestCore(unittest.TestCase):
         catalog = Tap_Shopify(config=self.mock_config).discover_streams()
 
         # expect valid catalog to be discovered
-        self.assertEqual(len(catalog), 11, "Total streams from default catalog")
+        self.assertEqual(len(catalog), 19, "Total streams from default catalog")
 
     # Run standard built-in tap tests from the SDK:
     @responses.activate()
@@ -34,8 +34,7 @@ class TestCore(unittest.TestCase):
         # given a mock response to the standard stream test
         responses.add(
             responses.GET,
-            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}"
-            "/orders.json?status=any",
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/orders.json",
             json={},
             status=200,
         )
@@ -100,6 +99,12 @@ class TestCore(unittest.TestCase):
             responses.GET,
             "https://mock-store.myshopify.com/"
             + "admin/api/{API_VERSION}/inventory_items/1234.json",
+            json={},
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            f"https://mock-store.myshopify.com/admin/api/{API_VERSION}/gift_cards.json",
             json={},
             status=200,
         )

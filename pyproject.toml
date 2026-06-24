@@ -11,19 +11,20 @@ license = "AGPL-3.0"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-requests = "^2.32.3"
-singer-sdk = "^0.43.1"
+requests = "^2.32.5"
+singer-sdk = "^0.48.1"
+certifi = "2026.6.17" # See https://github.com/certifi/python-certifi/issues/349
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.3.4"
-tox = "^4.24.1"
-flake8 = "^7.1.1"
-black = "^24.10.0"
+pytest = "^8.4.2"
+tox = "^4.30.3"
+flake8 = "^7.3.0"
+black = "^25.11.0"
 pydocstyle = "^6.1.1"
-mypy = "^1.14"
-types-requests = "^2.32.0"
-isort = "^5.13.2"
-responses = "0.25.6"
+mypy = "^1.19"
+types-requests = "^2.32.4"
+isort = "^6.1.0"
+responses = "0.26.1"
 
 [tool.isort]
 profile = "black"

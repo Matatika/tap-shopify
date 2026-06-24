@@ -3,6 +3,7 @@
 from decimal import Decimal
 from pathlib import Path
 
+from tap_shopify import hiddendict
 from tap_shopify.client import tap_shopifyStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
@@ -135,6 +136,7 @@ class OrdersStream(tap_shopifyStream):
     primary_keys = ["id"]
     replication_key = "updated_at"
     schema_filepath = SCHEMAS_DIR / "order.json"
+    is_sorted = True
 
     def post_process(self, row, context=None):
         """Perform syntactic transformations only."""
@@ -147,16 +149,57 @@ class OrdersStream(tap_shopifyStream):
 
     def get_child_context(self, record, context):
         """Return a context dictionary for child streams."""
-        return {"order_id": record["id"]}
+        return {
+            "order_id": record["id"],
+            "order": hiddendict(record),
+        }
 
     def get_url_params(self, context, next_page_token):
         """Return a dictionary of values to be used in URL parameterization."""
         params = super().get_url_params(context, next_page_token)
+        params["limit"] = 250
 
         if not next_page_token:
             params["status"] = "any"
+            params["order"] = f"{self.replication_key} asc"
 
         return params
+
+
+class _OrderEmbeddedStream(tap_shopifyStream):
+    parent_stream_type = OrdersStream
+    state_partitioning_keys = []  # do not store any state bookmarks
+
+    def get_records(self, context):
+        yield from context["order"][self.name]
+
+    def post_process(self, row, context=None):
+        row["order_id"] = context["order_id"]
+        return row
+
+
+class LineItemsStream(_OrderEmbeddedStream):
+    """Line items stream (child of orders)."""
+
+    name = "line_items"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "line_item.json"
+
+
+class ShippingLinesStream(_OrderEmbeddedStream):
+    """Shipping lines stream (child of orders)."""
+
+    name = "shipping_lines"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "shipping_line.json"
+
+
+class TaxLinesStream(_OrderEmbeddedStream):
+    """Tax lines stream (child of orders)."""
+
+    name = "tax_lines"
+    primary_keys = ["order_id", "title", "rate", "price"]
+    schema_filepath = SCHEMAS_DIR / "tax_line.json"
 
 
 class ProductsStream(tap_shopifyStream):
@@ -180,6 +223,60 @@ class TransactionsStream(tap_shopifyStream):
     records_jsonpath = "$.transactions[*]"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "transaction.json"
+    state_partitioning_keys = []
+
+    def post_process(self, row, context=None):
+        """Attach order context to each transaction."""
+        row = super().post_process(row, context)
+
+        if not row:
+            return None
+
+        row["order_id"] = context["order_id"] if context else None
+        return row
+
+
+class RefundsStream(_OrderEmbeddedStream):
+    """Refunds stream."""
+
+    name = "refunds"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "refund.json"
+
+    def get_child_context(self, record, context):
+        """Pass refund context to child streams."""
+        return {
+            "refund_id": record["id"],
+            "refund": hiddendict(record),
+        }
+
+
+class _RefundEmbeddedStream(tap_shopifyStream):
+    parent_stream_type = RefundsStream
+    state_partitioning_keys = []  # do not store any state bookmarks
+
+    def get_records(self, context):
+        yield from context["refund"][self.name]
+
+    def post_process(self, row, context=None):
+        row["refund_id"] = context["refund_id"]
+        return row
+
+
+class RefundLineItemsStream(_RefundEmbeddedStream):
+    """Refund line items stream (child of refunds)."""
+
+    name = "refund_line_items"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "refund_line_item.json"
+
+
+class OrderAdjustmentsStream(_RefundEmbeddedStream):
+    """Order adjustments stream (child of refunds)."""
+
+    name = "order_adjustments"
+    primary_keys = ["id"]
+    schema_filepath = SCHEMAS_DIR / "order_adjustment.json"
 
 
 class UsersStream(tap_shopifyStream):
@@ -190,3 +287,30 @@ class UsersStream(tap_shopifyStream):
     records_jsonpath = "$.users[*]"
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "user.json"
+
+
+class OrderDiscountCodesStream(_OrderEmbeddedStream):
+    """Order discounts stream (child of orders)."""
+
+    name = "order_discount_codes"
+    primary_keys = ["order_id", "index"]
+    schema_filepath = SCHEMAS_DIR / "order_discount_codes.json"
+
+    def get_records(self, context):
+        """Yield each discount code with a 1-based index per order."""
+        discount_codes = context["order"].get("discount_codes") or []
+        for idx, code in enumerate(discount_codes, start=1):
+            if not code:
+                continue
+            yield {**code, "index": idx}
+
+
+class GiftCardsStream(tap_shopifyStream):
+    """Gift cards stream."""
+
+    name = "gift_cards"
+    path = "/gift_cards.json"
+    records_jsonpath = "$.gift_cards[*]"
+    primary_keys = ["id"]
+    replication_key = "updated_at"
+    schema_filepath = SCHEMAS_DIR / "gift_cards.json"

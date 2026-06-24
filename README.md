@@ -40,6 +40,11 @@ If you plan on using environment variables to declare these settings then you wi
 * [Locations](https://shopify.dev/api/admin-rest/2023-10/resources/location)
 * [Metafields](https://shopify.dev/api/admin-rest/2023-10/resources/metafield)
 * [Orders](https://shopify.dev/api/admin-rest/2023-10/resources/order)
+* [Line Items](https://shopify.dev/api/admin-rest/2023-10/resources/order#resource-object-line-items)
+* Shipping Lines (child of Orders)
+* [Refunds](https://shopify.dev/api/admin-rest/2023-10/resources/refund)
+* Refund Line Items (child of Refunds)
+* Order Adjustments (child of Refunds)
 * [Products](https://shopify.dev/api/admin-rest/2023-10/resources/product)
 * [Transactions](https://shopify.dev/api/admin-rest/2023-10/resources/transaction)
 

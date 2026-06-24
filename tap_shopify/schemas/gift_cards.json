@@ -1,0 +1,112 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "api_client_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "balance": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "code": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "created_at": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date-time"
+        },
+        "currency": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "customer_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "disabled_at": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date-time"
+        },
+        "expires_on": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date"
+        },
+        "id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "initial_value": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "last_characters": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "line_item_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "note": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "order_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "template_suffix": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "user_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "updated_at": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date-time"
+        }
+    }
+}
