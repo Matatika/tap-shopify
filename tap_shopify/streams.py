@@ -390,8 +390,12 @@ class ShopifyQLStream(tap_shopifyStream):
     @cached_property
     def schema(self) -> dict:
         """Discover schema by probing the API with a 1-day window."""
-        probe_query = re.sub(r"\bSINCE\s+\S+", "", self._configured_query, flags=re.IGNORECASE)
-        probe_query = re.sub(r"\bUNTIL\s+\S+", "", probe_query, flags=re.IGNORECASE).strip()
+        probe_query = re.sub(
+            r"\bSINCE\s+\S+", "", self._configured_query, flags=re.IGNORECASE
+        )
+        probe_query = re.sub(
+            r"\bUNTIL\s+\S+", "", probe_query, flags=re.IGNORECASE
+        ).strip()
         probe_query += " SINCE -1d UNTIL -0d"
 
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(probe_query))
@@ -420,7 +424,11 @@ class ShopifyQLStream(tap_shopifyStream):
         props = [
             th.Property(
                 col["name"],
-                th.DateTimeType if col["name"] == self.replication_key else th.StringType,
+                (
+                    th.DateTimeType
+                    if col["name"] == self.replication_key
+                    else th.StringType
+                ),
             )
             for col in columns
         ]
