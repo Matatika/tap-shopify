@@ -383,10 +383,13 @@ class ShopifyQLStream(tap_shopifyStream):
         query_entry = kwargs.pop("query")
         self.name = query_entry["name"]
         self._configured_query = query_entry["query"]
-        self.primary_keys = query_entry.get("primary_keys") or []
-        self.replication_key = query_entry.get("replication_key")
 
         super().__init__(*args, **kwargs)
+
+        # Must be set after super().__init__(), which resets
+        # self._primary_keys / self._replication_key to their defaults.
+        self.primary_keys = query_entry.get("primary_keys") or []
+        self.replication_key = query_entry.get("replication_key")
 
     @cached_property
     def schema(self) -> dict:
@@ -411,7 +414,17 @@ class ShopifyQLStream(tap_shopifyStream):
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData
         columns = query["tableData"]["columns"] if "tableData" in query else []
 
-        props = [th.Property(col["name"], th.StringType) for col in columns]
+        props = [
+            th.Property(
+                col["name"],
+                (
+                    th.DateTimeType
+                    if col["name"] == self.replication_key
+                    else th.StringType
+                ),
+            )
+            for col in columns
+        ]
         return th.PropertiesList(*props).to_dict()
 
     def prepare_request_payload(self, context, next_page_token):
@@ -468,5 +481,14 @@ class ShopifyQLStream(tap_shopifyStream):
         return {}
 
     def post_process(self, row, context=None):
-        """Return the row as-is — deduplication is not applicable here."""
+        """Normalize the replication key to a full timestamp.
+
+        ShopifyQL returns date-only strings (e.g. "2026-07-03") for TIMESERIES
+        columns, but the declared date-time schema type — and BigQuery's
+        TIMESTAMP column type on load — require a full timestamp value.
+        """
+        if self.replication_key and self.replication_key in row:
+            value = row[self.replication_key]
+            if isinstance(value, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+                row[self.replication_key] = f"{value}T00:00:00Z"
         return row
