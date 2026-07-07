@@ -1,9 +1,8 @@
 """tap_shopify tap class."""
 
-from typing import List
-
-from singer_sdk import Stream, Tap
+from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
+from typing_extensions import override
 
 # Import stream types
 from tap_shopify.streams import (
@@ -190,7 +189,8 @@ class Tap_Shopify(Tap):
         ),
     ).to_dict()
 
-    def discover_streams(self) -> List[Stream]:
+    @override
+    def discover_streams(self):
         """Return a list of discovered streams.
 
         Standard Shopify REST streams are always included. If `is_plus_account`
@@ -203,7 +203,6 @@ class Tap_Shopify(Tap):
         if self.config.get("is_plus_account"):
             stream_classes.append(UsersStream)
         streams = [cls(tap=self) for cls in stream_classes]
-
         for entry in self.config.get("shopifyql_queries") or []:
             streams.append(ShopifyQLStream(tap=self, query=entry))
 
