@@ -2,12 +2,14 @@
 
 import json
 import re
-import requests
 from decimal import Decimal
 from functools import cached_property
 from pathlib import Path
 
+import requests
 from singer_sdk import typing as th
+from singer_sdk.exceptions import FatalAPIError
+from typing_extensions import override
 
 from tap_shopify import hiddendict
 from tap_shopify.client import tap_shopifyStream
@@ -362,8 +364,9 @@ class ShopifyQLStream(tap_shopifyStream):
     http_method = "POST"
     path = "/graphql.json"
 
+    @override
     @property
-    def is_sorted(self) -> bool:
+    def is_sorted(self):
         return bool(self.replication_key)
 
     # GraphQL wrapper for the shopifyqlQuery field (API 2025-10+).
@@ -376,6 +379,7 @@ class ShopifyQLStream(tap_shopifyStream):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialise the ShopifyQL stream."""
         query_entry = kwargs.pop("query")
         self.name = query_entry["name"]
         self._configured_query = query_entry["query"]
@@ -387,8 +391,12 @@ class ShopifyQLStream(tap_shopifyStream):
     @cached_property
     def schema(self) -> dict:
         """Discover schema by probing the API with a 1-day window."""
-        probe_query = re.sub(r"\bSINCE\s+\S+", "", self._configured_query, flags=re.IGNORECASE)
-        probe_query = re.sub(r"\bUNTIL\s+\S+", "", probe_query, flags=re.IGNORECASE).strip()
+        probe_query = re.sub(
+            r"\b(SINCE|UNTIL)\s+\S+",
+            "",
+            self._configured_query,
+            flags=re.IGNORECASE,
+        ).strip()
         probe_query += " SINCE -1d UNTIL -0d"
 
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(probe_query))
@@ -397,17 +405,12 @@ class ShopifyQLStream(tap_shopifyStream):
             json={"query": graphql},
             headers={"X-Shopify-Access-Token": self.config["access_token"]},
         )
-        response.raise_for_status()
-        data = response.json()
+        self.validate_response(response)
+        query: dict = response.json()["data"]["shopifyqlQuery"]
 
-        result = data.get("shopifyqlQuery") or {}
-        parse_errors = result.get("parseErrors") or []
-        if parse_errors:
-            raise RuntimeError(
-                f"ShopifyQL parse error during schema discovery for '{self.name}': {parse_errors}"
-            )
+        # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData
+        columns = query["tableData"]["columns"] if "tableData" in query else []
 
-        columns = (result.get("tableData") or {}).get("columns") or []
         props = [th.Property(col["name"], th.StringType) for col in columns]
         return th.PropertiesList(*props).to_dict()
 
@@ -433,27 +436,30 @@ class ShopifyQLStream(tap_shopifyStream):
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(query))
         return {"query": graphql}
 
+    @override
+    def validate_response(self, response):
+        super().validate_response(response)
+
+        data: dict = response.json()
+
+        # https://shopify.dev/docs/api/admin-graphql/2025-10#status-and-error-codes
+        if gql_errors := data.get("errors"):
+            raise FatalAPIError(f"GraphQL errors: {gql_errors}")
+
+        # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlQueryResponse
+        query: dict = data["data"]["shopifyqlQuery"]
+
+        if parse_errors := query["parseErrors"]:
+            raise FatalAPIError(f"ShopifyQL parse errors: {parse_errors}")
+
     def parse_response(self, response):
         """Unpack the tabular ShopifyQL response into one dict per row."""
-        data = response.json()
+        query: dict = response.json()["data"]["shopifyqlQuery"]
 
-        gql_errors = data.get("errors")
-        if gql_errors:
-            raise RuntimeError(f"GraphQL errors: {gql_errors}")
+        # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData#field-ShopifyqlTableData
+        yield from (query["tableData"]["rows"] if "tableData" in query else [])
 
-        result = data.get("shopifyqlQuery") or {}
-
-        parse_errors = result.get("parseErrors") or []
-        if parse_errors:
-            raise RuntimeError(
-                f"ShopifyQL parse error in stream '{self.name}': {parse_errors}"
-            )
-
-        table_data = result.get("tableData") or {}
-        for row in table_data.get("rows") or []:
-            yield row
-
-    def get_new_paginator(self):
+    def get_new_paginator(self):  # noqa: D403
         """ShopifyQL returns all rows in a single response — no pagination."""
         return None
 
