@@ -9,6 +9,7 @@ from pathlib import Path
 import requests
 from singer_sdk import typing as th
 from singer_sdk.exceptions import FatalAPIError
+from typing_extensions import override
 
 from tap_shopify import hiddendict
 from tap_shopify.client import tap_shopifyStream
@@ -363,8 +364,9 @@ class ShopifyQLStream(tap_shopifyStream):
     http_method = "POST"
     path = "/graphql.json"
 
+    @override
     @property
-    def is_sorted(self) -> bool:
+    def is_sorted(self):
         return bool(self.replication_key)
 
     # GraphQL wrapper for the shopifyqlQuery field (API 2025-10+).
@@ -377,6 +379,7 @@ class ShopifyQLStream(tap_shopifyStream):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialise the ShopifyQL stream."""
         query_entry = kwargs.pop("query")
         self.name = query_entry["name"]
         self._configured_query = query_entry["query"]
@@ -433,6 +436,7 @@ class ShopifyQLStream(tap_shopifyStream):
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(query))
         return {"query": graphql}
 
+    @override
     def validate_response(self, response):
         super().validate_response(response)
 
@@ -455,7 +459,7 @@ class ShopifyQLStream(tap_shopifyStream):
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData#field-ShopifyqlTableData
         yield from (query["tableData"]["rows"] if "tableData" in query else [])
 
-    def get_new_paginator(self):
+    def get_new_paginator(self):  # noqa: D403
         """ShopifyQL returns all rows in a single response — no pagination."""
         return None
 
