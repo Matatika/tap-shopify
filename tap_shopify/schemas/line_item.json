@@ -207,11 +207,14 @@
         },
         "properties": {
             "type": [
-                "object",
+                "array",
                 "null"
             ],
-            "properties": {},
-            "additionalProperties": true
+            "items": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+            }
         },
         "quantity": {
             "type": [

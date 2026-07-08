@@ -839,7 +839,7 @@
         },
         "tax_exempt": {
             "type": [
-                "string",
+                "boolean",
                 "null"
             ]
         },
