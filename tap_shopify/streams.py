@@ -1,6 +1,7 @@
 """Stream type classes for tap-shopify."""
 
 import json
+import logging
 import re
 from decimal import Decimal
 from functools import cached_property
@@ -8,13 +9,16 @@ from pathlib import Path
 
 import requests
 from singer_sdk import typing as th
-from singer_sdk.exceptions import FatalAPIError
+from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
+from singer_sdk.pagination import BaseOffsetPaginator
 from typing_extensions import override
 
 from tap_shopify import hiddendict
 from tap_shopify.client import tap_shopifyStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
+
+logger = logging.getLogger(__name__)
 
 
 class AbandonedCheckouts(tap_shopifyStream):
@@ -324,6 +328,46 @@ class GiftCardsStream(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "gift_cards.json"
 
 
+class _ShopifyQLPaginator(BaseOffsetPaginator):
+    """Pages through a ShopifyQL response using LIMIT/OFFSET.
+
+    The `shopifyqlQuery` field has no cursor or `pageInfo` — it caps every
+    response at `page_size` rows (1,000 by default) with no error or
+    indication that results were truncated. Shopify's own guidance (see
+    ShopifyQLStream's docstring) is to page through results by re-issuing the
+    query with `LIMIT <page_size> OFFSET <n * page_size>` until a response
+    comes back with fewer than `page_size` rows.
+
+    `max_pages` is a safety valve, not an expected limit: it stops an
+    unexpectedly large backlog from paginating for an unbounded number of
+    requests in one sync. Hitting it is logged as a warning, not an error —
+    the stream's bookmark still only advances to the last fully-fetched
+    page, so remaining data is picked up on the next incremental run.
+    """
+
+    def __init__(self, start_value, page_size, max_pages, stream_name):
+        super().__init__(start_value, page_size)
+        self._max_pages = max_pages
+        self._stream_name = stream_name
+
+    def has_more(self, response) -> bool:
+        """Continue while the last page was full and under the page cap."""
+        if self.count >= self._max_pages:
+            logger.warning(
+                "ShopifyQL stream '%s' hit its %d-page pagination safety "
+                "cap at offset %d without exhausting results for this sync "
+                "window; the remainder will be fetched on a later run.",
+                self._stream_name,
+                self._max_pages,
+                self.current_value,
+            )
+            return False
+
+        result = (response.json().get("data") or {}).get("shopifyqlQuery") or {}
+        rows = (result.get("tableData") or {}).get("rows") or []
+        return len(rows) >= self._page_size
+
+
 class ShopifyQLStream(tap_shopifyStream):
     """Base class for config-driven ShopifyQL query streams.
 
@@ -358,15 +402,64 @@ class ShopifyQLStream(tap_shopifyStream):
     used as-is.
 
     Queries without a TIMESERIES clause are always full-refresh.
+
+    -----------------------------------------------------------------------
+    Pagination
+    -----------------------------------------------------------------------
+    `shopifyqlQuery` defaults to returning at most 1,000 rows per request
+    and offers no cursor-based pagination — but Shopify's Admin API team has
+    confirmed (shopify.dev / Shopify Developer Community, Oct 2025) that a
+    query's own `LIMIT`/`OFFSET` clauses are the supported way to page
+    through a larger result set, the same syntax used by Shopify's Analytics
+    query editor. Any `LIMIT`/`OFFSET` written in the configured query is
+    replaced each request with one reflecting the current page; see
+    `PAGE_SIZE` / `MAX_PAGES_PER_SYNC` below to tune paging behavior.
+
+    Without this, a query spanning more rows than one page silently drops
+    everything past the first page — mid-day, if that's where the row count
+    happens to land — with no error raised.
+
+    IMPORTANT — ORDER BY must be fully deterministic for paginating queries.
+    `ORDER BY day ASC` alone only sorts by day; if a day has more rows than
+    fit in one page, LIMIT/OFFSET has no defined tie-break for rows sharing
+    that day; the same row can then be returned on both sides of a page
+    boundary (verified directly: this produced 64 duplicate rows across two
+    live pages). The fix is to ORDER BY every GROUP BY column, not just the
+    TIMESERIES one — e.g. `ORDER BY day ASC, order_id ASC, line_item_id ASC,
+    ...` for every column in the query's GROUP BY clause. Since GROUP BY
+    guarantees each such combination appears in at most one output row, this
+    guarantees no ties are possible (confirmed directly: zero overlap across
+    pages with a fully-specified ORDER BY, vs. 64 duplicate rows without
+    one). A query with no GROUP BY (e.g. one row per TIMESERIES value, like
+    a simple daily rollup) doesn't need this — ORDER BY on the TIMESERIES
+    column alone is already unique per row in that case.
     """
 
     schema_filepath = None  # schema is discovered dynamically via API
     http_method = "POST"
     path = "/graphql.json"
 
+    # Rows requested per page. Shopify's own default/recommendation when
+    # paging via LIMIT/OFFSET (see the "Pagination" docstring section above).
+    PAGE_SIZE = 1000
+
+    # Safety cap on pages fetched in a single sync (see _ShopifyQLPaginator).
+    # 50 pages * 1,000 rows = 50,000 rows per run before deferring the rest
+    # to the next incremental run.
+    MAX_PAGES_PER_SYNC = 50
+
+    # Matches a LIMIT clause and its optional trailing OFFSET, so a
+    # user-authored LIMIT/OFFSET in the configured query can be replaced
+    # with the current page's values rather than conflicting with them.
+    _LIMIT_OFFSET_RE = re.compile(r"\bLIMIT\s+\d+(?:\s+OFFSET\s+\d+)?", re.IGNORECASE)
+    # VISUALIZE is a trailing rendering directive, not part of the query
+    # pipeline — LIMIT/OFFSET must be inserted before it, not after.
+    _VISUALIZE_RE = re.compile(r"\bVISUALIZE\b.*\Z", re.IGNORECASE | re.DOTALL)
+
     @override
     @property
-    def is_sorted(self):
+    def is_sorted(self) -> bool:
+        """Return True if the stream has a replication key configured."""
         return bool(self.replication_key)
 
     # GraphQL wrapper for the shopifyqlQuery field (API 2025-10+).
@@ -379,7 +472,7 @@ class ShopifyQLStream(tap_shopifyStream):
     )
 
     def __init__(self, *args, **kwargs):
-        """Initialise the ShopifyQL stream."""
+        """Initialize the stream from a shopifyql_queries config entry."""
         query_entry = kwargs.pop("query")
         self.name = query_entry["name"]
         self._configured_query = query_entry["query"]
@@ -428,7 +521,7 @@ class ShopifyQLStream(tap_shopifyStream):
         return th.PropertiesList(*props).to_dict()
 
     def prepare_request_payload(self, context, next_page_token):
-        """Build the GraphQL POST body, injecting state into the SINCE clause."""
+        """Build the GraphQL POST body, injecting state and paging into the query."""
         query = self._configured_query
 
         # Inject or replace SINCE using the starting timestamp, which resolves
@@ -446,17 +539,37 @@ class ShopifyQLStream(tap_shopifyStream):
             else:
                 query = query.rstrip() + f" SINCE {since_date}"
 
+        offset = next_page_token or 0
+        query = self._paginated_query(query, self.PAGE_SIZE, offset)
+
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(query))
         return {"query": graphql}
 
     @override
     def validate_response(self, response):
+        """Validate the response, retrying Shopify's in-body GraphQL throttling.
+
+        `shopifyqlQuery` returns HTTP 200 even when throttled — the
+        THROTTLED error only appears inside the GraphQL response body, so
+        the SDK's default status-code-based retry logic never sees it.
+        Checked first, before the blanket GraphQL-error check below, so a
+        throttled page backs off and retries instead of raising an
+        unretried, fatal error — which pagination makes considerably more
+        likely to occur.
+        """
         super().validate_response(response)
 
         data: dict = response.json()
 
         # https://shopify.dev/docs/api/admin-graphql/2025-10#status-and-error-codes
         if gql_errors := data.get("errors"):
+            for error in gql_errors:
+                if (error.get("extensions") or {}).get("code") == "THROTTLED":
+                    raise RetriableAPIError(
+                        f"ShopifyQL query throttled for stream '{self.name}': "
+                        f"{error.get('message')}",
+                        response,
+                    )
             raise FatalAPIError(f"GraphQL errors: {gql_errors}")
 
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlQueryResponse
@@ -465,6 +578,26 @@ class ShopifyQLStream(tap_shopifyStream):
         if parse_errors := query["parseErrors"]:
             raise FatalAPIError(f"ShopifyQL parse errors: {parse_errors}")
 
+    @classmethod
+    def _paginated_query(cls, query: str, limit: int, offset: int) -> str:
+        """Return `query` with a fresh LIMIT/OFFSET for the given page.
+
+        Any LIMIT/OFFSET already in the query is replaced rather than
+        stacked, and the new clause is placed before a trailing VISUALIZE
+        directive (if any) since VISUALIZE must be the last clause.
+        """
+        query = cls._LIMIT_OFFSET_RE.sub("", query)
+
+        visualize_match = cls._VISUALIZE_RE.search(query)
+        visualize_clause = ""
+        if visualize_match:
+            visualize_clause = " " + visualize_match.group(0).strip()
+            query = query[: visualize_match.start()]
+
+        query = query.rstrip() + f" LIMIT {limit} OFFSET {offset}"
+        query = re.sub(r"[ \t]{2,}", " ", query)
+        return query + visualize_clause
+
     def parse_response(self, response):
         """Unpack the tabular ShopifyQL response into one dict per row."""
         query: dict = response.json()["data"]["shopifyqlQuery"]
@@ -472,9 +605,14 @@ class ShopifyQLStream(tap_shopifyStream):
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData#field-ShopifyqlTableData
         yield from (query["tableData"]["rows"] if "tableData" in query else [])
 
-    def get_new_paginator(self):  # noqa: D403
-        """ShopifyQL returns all rows in a single response — no pagination."""
-        return None
+    def get_new_paginator(self):
+        """Page through results via LIMIT/OFFSET (see the class docstring)."""
+        return _ShopifyQLPaginator(
+            start_value=0,
+            page_size=self.PAGE_SIZE,
+            max_pages=self.MAX_PAGES_PER_SYNC,
+            stream_name=self.name,
+        )
 
     def get_url_params(self, context, next_page_token):
         """No query-string params needed; the query goes in the POST body."""
