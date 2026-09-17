@@ -8,7 +8,7 @@ in isolation: the query-string rewrite, and the paginator's stop condition.
 """
 
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from tap_shopify.streams import ShopifyQLStream, _ShopifyQLPaginator
 
@@ -76,28 +76,44 @@ class TestShopifyQLPaginator(unittest.TestCase):
 
     def test_continues_when_page_is_full(self):
         paginator = _ShopifyQLPaginator(
-            start_value=0, page_size=1000, max_pages=50, stream_name="test_stream"
+            start_value=0,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
         )
 
         self.assertTrue(paginator.has_more(_mock_response(rows=["row"] * 1000)))
 
     def test_stops_when_page_is_partial(self):
         paginator = _ShopifyQLPaginator(
-            start_value=1000, page_size=1000, max_pages=50, stream_name="test_stream"
+            start_value=1000,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
         )
 
         self.assertFalse(paginator.has_more(_mock_response(rows=["row"] * 250)))
 
     def test_stops_when_page_is_empty(self):
         paginator = _ShopifyQLPaginator(
-            start_value=2000, page_size=1000, max_pages=50, stream_name="test_stream"
+            start_value=2000,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
         )
 
         self.assertFalse(paginator.has_more(_mock_response(rows=[])))
 
     def test_safety_cap_stops_pagination_even_on_a_full_page(self):
         paginator = _ShopifyQLPaginator(
-            start_value=49000, page_size=1000, max_pages=50, stream_name="test_stream"
+            start_value=49000,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
         )
         # advance() increments the page count before has_more() sees it, so
         # simulate 49 prior full pages the same way: via advance(), not by
@@ -114,7 +130,11 @@ class TestShopifyQLPaginator(unittest.TestCase):
 
     def test_advance_increments_offset_by_page_size(self):
         paginator = _ShopifyQLPaginator(
-            start_value=0, page_size=1000, max_pages=50, stream_name="test_stream"
+            start_value=0,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
         )
 
         paginator.advance(_mock_response(rows=["row"] * 1000))
@@ -124,12 +144,65 @@ class TestShopifyQLPaginator(unittest.TestCase):
 
     def test_advance_marks_finished_on_partial_page(self):
         paginator = _ShopifyQLPaginator(
-            start_value=1000, page_size=1000, max_pages=50, stream_name="test_stream"
+            start_value=1000,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
         )
 
         paginator.advance(_mock_response(rows=["row"] * 10))
 
         self.assertTrue(paginator.finished)
+
+    @patch("tap_shopify.streams.time.sleep")
+    def test_cools_down_before_requesting_the_next_page(self, mock_sleep):
+        """A full page means another page is coming — cool down first.
+
+        Confirmed live in production that firing the next page immediately
+        after a successful one re-triggers Shopify's throttle every time,
+        since this query's cost leaves the bucket nearly empty regardless.
+        """
+        paginator = _ShopifyQLPaginator(
+            start_value=0,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=70,
+        )
+
+        paginator.has_more(_mock_response(rows=["row"] * 1000))
+
+        mock_sleep.assert_called_once_with(70)
+
+    @patch("tap_shopify.streams.time.sleep")
+    def test_no_cooldown_when_this_is_the_last_page(self, mock_sleep):
+        """A partial page means there's no next page — nothing to cool down for."""
+        paginator = _ShopifyQLPaginator(
+            start_value=1000,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=70,
+        )
+
+        paginator.has_more(_mock_response(rows=["row"] * 10))
+
+        mock_sleep.assert_not_called()
+
+    @patch("tap_shopify.streams.time.sleep")
+    def test_no_cooldown_when_disabled(self, mock_sleep):
+        paginator = _ShopifyQLPaginator(
+            start_value=0,
+            page_size=1000,
+            max_pages=50,
+            stream_name="test_stream",
+            page_cooldown=0,
+        )
+
+        paginator.has_more(_mock_response(rows=["row"] * 1000))
+
+        mock_sleep.assert_not_called()
 
 
 class TestBackoffMaxTries(unittest.TestCase):

@@ -3,6 +3,7 @@
 import json
 import logging
 import re
+import time
 from decimal import Decimal
 from functools import cached_property
 from pathlib import Path
@@ -343,12 +344,24 @@ class _ShopifyQLPaginator(BaseOffsetPaginator):
     requests in one sync. Hitting it is logged as a warning, not an error —
     the stream's bookmark still only advances to the last fully-fetched
     page, so remaining data is picked up on the next incremental run.
+
+    `page_cooldown` is a deliberate pause before requesting the next page.
+    Confirmed live in production this is necessary, not just nice-to-have: a
+    query wide/dense enough to need pagination also costs close to Shopify's
+    entire GraphQL rate-limit bucket per request, so firing the next page
+    immediately after a successful one re-triggers the same THROTTLED error
+    every time — observed as five wasted retries per page, succeeding only
+    once backoff happened to wait long enough anyway. Reactive backoff alone
+    (see BACKOFF_MAX_TRIES) papers over this per request but never stops it
+    from recurring on every subsequent page; pausing proactively here means
+    most pages succeed on the first attempt instead.
     """
 
-    def __init__(self, start_value, page_size, max_pages, stream_name):
+    def __init__(self, start_value, page_size, max_pages, stream_name, page_cooldown):
         super().__init__(start_value, page_size)
         self._max_pages = max_pages
         self._stream_name = stream_name
+        self._page_cooldown = page_cooldown
 
     def has_more(self, response) -> bool:
         """Continue while the last page was full and under the page cap."""
@@ -365,7 +378,20 @@ class _ShopifyQLPaginator(BaseOffsetPaginator):
 
         result = (response.json().get("data") or {}).get("shopifyqlQuery") or {}
         rows = (result.get("tableData") or {}).get("rows") or []
-        return len(rows) >= self._page_size
+        more = len(rows) >= self._page_size
+
+        if more and self._page_cooldown:
+            logger.info(
+                "ShopifyQL stream '%s' cooling down %ds before requesting "
+                "the next page (offset %d), to clear Shopify's rate-limit "
+                "window instead of immediately re-triggering it.",
+                self._stream_name,
+                self._page_cooldown,
+                self.current_value + self._page_size,
+            )
+            time.sleep(self._page_cooldown)
+
+        return more
 
 
 class ShopifyQLStream(tap_shopifyStream):
@@ -448,17 +474,27 @@ class ShopifyQLStream(tap_shopifyStream):
     # to the next incremental run.
     MAX_PAGES_PER_SYNC = 50
 
-    # Retry budget for THROTTLED responses (see validate_response/
-    # backoff_max_tries below). The SDK's default of 5 tries gives ~30s of
+    # Safety-net retry budget for THROTTLED responses that slip through
+    # despite PAGE_COOLDOWN_SECONDS below (see validate_response/
+    # backoff_max_tries). The SDK's default of 5 tries gives ~30s of
     # cumulative backoff with the default exponential wait generator, which
-    # is not enough: a single wide-range ShopifyQL query can consume nearly
-    # the entire 1,000-point GraphQL cost bucket in one call (confirmed
-    # directly against the live API), and recovering needs enough backoff to
-    # span Shopify's bucket-reset window — observed directly to take
-    # ~60-90s. Confirmed live in production: the default budget was
+    # on its own is not enough: a single wide-range ShopifyQL query can
+    # consume nearly the entire 1,000-point GraphQL cost bucket in one call
+    # (confirmed directly against the live API), and recovering needs enough
+    # backoff to span Shopify's bucket-reset window — observed directly to
+    # take ~60-90s. Confirmed live in production: the default budget was
     # exhausted mid-backoff (2.7s, 5.0s, 8.4s, 16.5s, ~33s total) before the
     # window reset, and the pipeline failed outright.
     BACKOFF_MAX_TRIES = 7
+
+    # Deliberate pause before requesting each subsequent page (see
+    # _ShopifyQLPaginator). Primary defense against THROTTLED responses —
+    # confirmed live in production that firing the next page immediately
+    # after a successful one re-triggers the exact same throttle every
+    # single time, since the query's cost leaves the bucket nearly empty
+    # regardless of whether the prior request succeeded or was itself
+    # retried. Sized with margin above the observed ~60-90s reset window.
+    PAGE_COOLDOWN_SECONDS = 70
 
     # Matches a LIMIT clause and its optional trailing OFFSET, so a
     # user-authored LIMIT/OFFSET in the configured query can be replaced
@@ -624,6 +660,7 @@ class ShopifyQLStream(tap_shopifyStream):
             page_size=self.PAGE_SIZE,
             max_pages=self.MAX_PAGES_PER_SYNC,
             stream_name=self.name,
+            page_cooldown=self.PAGE_COOLDOWN_SECONDS,
         )
 
     def get_url_params(self, context, next_page_token):
