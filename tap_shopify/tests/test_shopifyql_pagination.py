@@ -132,5 +132,23 @@ class TestShopifyQLPaginator(unittest.TestCase):
         self.assertTrue(paginator.finished)
 
 
+class TestBackoffMaxTries(unittest.TestCase):
+    """Tests for ShopifyQLStream.backoff_max_tries.
+
+    The SDK's default (5 tries, ~30s of cumulative exponential backoff) is
+    not enough to clear Shopify's GraphQL throttle window for this stream —
+    confirmed live in production (see BACKOFF_MAX_TRIES's docstring). This
+    just guards against that override silently reverting to the default.
+    """
+
+    def test_widens_the_default_retry_budget(self):
+        stream = Mock(BACKOFF_MAX_TRIES=ShopifyQLStream.BACKOFF_MAX_TRIES)
+
+        tries = ShopifyQLStream.backoff_max_tries(stream)
+
+        self.assertEqual(tries, ShopifyQLStream.BACKOFF_MAX_TRIES)
+        self.assertGreater(tries, 5)  # the SDK's own default
+
+
 if __name__ == "__main__":
     unittest.main()

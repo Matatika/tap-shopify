@@ -448,6 +448,18 @@ class ShopifyQLStream(tap_shopifyStream):
     # to the next incremental run.
     MAX_PAGES_PER_SYNC = 50
 
+    # Retry budget for THROTTLED responses (see validate_response/
+    # backoff_max_tries below). The SDK's default of 5 tries gives ~30s of
+    # cumulative backoff with the default exponential wait generator, which
+    # is not enough: a single wide-range ShopifyQL query can consume nearly
+    # the entire 1,000-point GraphQL cost bucket in one call (confirmed
+    # directly against the live API), and recovering needs enough backoff to
+    # span Shopify's bucket-reset window — observed directly to take
+    # ~60-90s. Confirmed live in production: the default budget was
+    # exhausted mid-backoff (2.7s, 5.0s, 8.4s, 16.5s, ~33s total) before the
+    # window reset, and the pipeline failed outright.
+    BACKOFF_MAX_TRIES = 7
+
     # Matches a LIMIT clause and its optional trailing OFFSET, so a
     # user-authored LIMIT/OFFSET in the configured query can be replaced
     # with the current page's values rather than conflicting with them.
@@ -617,6 +629,14 @@ class ShopifyQLStream(tap_shopifyStream):
     def get_url_params(self, context, next_page_token):
         """No query-string params needed; the query goes in the POST body."""
         return {}
+
+    def backoff_max_tries(self) -> int:
+        """Widen the retry budget so backoff can span Shopify's throttle window.
+
+        See BACKOFF_MAX_TRIES above for why the SDK's default (5) isn't
+        enough for this stream specifically.
+        """
+        return self.BACKOFF_MAX_TRIES
 
     def post_process(self, row, context=None):
         """Normalize the replication key to a full timestamp.
