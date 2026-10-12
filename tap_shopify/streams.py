@@ -8,7 +8,8 @@ from pathlib import Path
 
 import requests
 from singer_sdk import typing as th
-from singer_sdk.exceptions import FatalAPIError
+from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
+from singer_sdk.pagination import BaseOffsetPaginator
 from typing_extensions import override
 
 from tap_shopify import hiddendict
@@ -324,6 +325,14 @@ class GiftCardsStream(tap_shopifyStream):
     schema_filepath = SCHEMAS_DIR / "gift_cards.json"
 
 
+class _ShopifyQLPaginator(BaseOffsetPaginator):
+    @override
+    def has_more(self, response):
+        query: dict = response.json()["data"]["shopifyqlQuery"]
+        rows = query["tableData"]["rows"] if "tableData" in query else []
+        return len(rows) == self._page_size
+
+
 class ShopifyQLStream(tap_shopifyStream):
     """Base class for config-driven ShopifyQL query streams.
 
@@ -358,11 +367,20 @@ class ShopifyQLStream(tap_shopifyStream):
     used as-is.
 
     Queries without a TIMESERIES clause are always full-refresh.
+
+    -----------------------------------------------------------------------
+    Pagination
+    -----------------------------------------------------------------------
+    `shopifyqlQuery` returns at most 1,000 rows and has no cursor, so the
+    stream pages with LIMIT/OFFSET, which replaces any LIMIT in the query.
+    ORDER BY every GROUP BY column: rows that tie on the sort order can move
+    across a page boundary and be duplicated or skipped.
     """
 
     schema_filepath = None  # schema is discovered dynamically via API
     http_method = "POST"
     path = "/graphql.json"
+    page_size = 1000
 
     @override
     @property
@@ -383,10 +401,11 @@ class ShopifyQLStream(tap_shopifyStream):
         query_entry = kwargs.pop("query")
         self.name = query_entry["name"]
         self._configured_query = query_entry["query"]
-        self.primary_keys = query_entry.get("primary_keys") or []
-        self.replication_key = query_entry.get("replication_key")
 
         super().__init__(*args, **kwargs)
+
+        self.primary_keys = query_entry.get("primary_keys") or []
+        self.replication_key = query_entry.get("replication_key")
 
     @cached_property
     def schema(self) -> dict:
@@ -411,7 +430,17 @@ class ShopifyQLStream(tap_shopifyStream):
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData
         columns = query["tableData"]["columns"] if "tableData" in query else []
 
-        props = [th.Property(col["name"], th.StringType) for col in columns]
+        props = [
+            th.Property(
+                col["name"],
+                (
+                    th.DateTimeType
+                    if col["name"] == self.replication_key
+                    else th.StringType
+                ),
+            )
+            for col in columns
+        ]
         return th.PropertiesList(*props).to_dict()
 
     def prepare_request_payload(self, context, next_page_token):
@@ -433,6 +462,11 @@ class ShopifyQLStream(tap_shopifyStream):
             else:
                 query = query.rstrip() + f" SINCE {since_date}"
 
+        query = re.sub(
+            r"\bLIMIT\s+\d+(\s+OFFSET\s+\d+)?", "", query, flags=re.IGNORECASE
+        )
+        query = f"{query.rstrip()} LIMIT {self.page_size} OFFSET {next_page_token or 0}"
+
         graphql = self._GRAPHQL_TEMPLATE.format(shopifyql=json.dumps(query))
         return {"query": graphql}
 
@@ -444,6 +478,11 @@ class ShopifyQLStream(tap_shopifyStream):
 
         # https://shopify.dev/docs/api/admin-graphql/2025-10#status-and-error-codes
         if gql_errors := data.get("errors"):
+            # A throttled query still returns HTTP 200.
+            if any(
+                e.get("extensions", {}).get("code") == "THROTTLED" for e in gql_errors
+            ):
+                raise RetriableAPIError(f"GraphQL errors: {gql_errors}", response)
             raise FatalAPIError(f"GraphQL errors: {gql_errors}")
 
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlQueryResponse
@@ -459,14 +498,22 @@ class ShopifyQLStream(tap_shopifyStream):
         # https://shopify.dev/docs/api/admin-graphql/2025-10/objects/ShopifyqlTableData#field-ShopifyqlTableData
         yield from (query["tableData"]["rows"] if "tableData" in query else [])
 
-    def get_new_paginator(self):  # noqa: D403
-        """ShopifyQL returns all rows in a single response — no pagination."""
-        return None
+    @override
+    def get_new_paginator(self):
+        return _ShopifyQLPaginator(0, self.page_size)
 
     def get_url_params(self, context, next_page_token):
         """No query-string params needed; the query goes in the POST body."""
         return {}
 
+    @override
+    def backoff_max_tries(self):
+        # The throttle on a ShopifyQL query can outlast the default retries.
+        return 7
+
     def post_process(self, row, context=None):
-        """Return the row as-is — deduplication is not applicable here."""
+        """Give a date-only replication key value a time, to match its type."""
+        value = row.get(self.replication_key)
+        if isinstance(value, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+            row[self.replication_key] = f"{value}T00:00:00Z"
         return row

@@ -34,7 +34,7 @@ product_return_data = {
 }
 
 
-def set_up_tap_with_custom_catalog(mock_config, stream_list):
+def set_up_tap_with_custom_catalog(mock_config, stream_list, state=None):
     """Create an instance of tap-spotify with specific config and streams."""
     tap = Tap_Shopify(config=mock_config)
     # Run discovery
@@ -50,4 +50,4 @@ def set_up_tap_with_custom_catalog(mock_config, stream_list):
             selected=True,
         )
     # Initialise tap with new catalog
-    return Tap_Shopify(config=mock_config, catalog=catalog.to_dict())
+    return Tap_Shopify(config=mock_config, catalog=catalog.to_dict(), state=state)
