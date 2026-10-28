@@ -5,6 +5,7 @@ import re
 from decimal import Decimal
 from functools import cached_property
 from pathlib import Path
+from urllib.parse import parse_qsl
 
 import requests
 from singer_sdk import typing as th
@@ -232,6 +233,26 @@ class TransactionsStream(tap_shopifyStream):
     primary_keys = ["id"]
     schema_filepath = SCHEMAS_DIR / "transaction.json"
     state_partitioning_keys = []
+
+    def get_url_params(self, context, next_page_token):
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Deliberately does not fall through to the base class's
+        `created_at_min`/`updated_at_min` logic. This stream declares no
+        `replication_key`, so it can never earn a bookmark -- the base class's
+        cold-start branch (`params["created_at_min"] = start_date`) would
+        therefore apply to every request, forever, silently dropping any
+        transaction older than the tap's static `start_date` even on orders
+        that were correctly re-visited via the parent OrdersStream's own
+        `updated_at` cursor. Per the tap maintainers
+        (https://github.com/Matatika/tap-shopify/issues/26), once an order is
+        visited all of its transactions should be extracted (an order has at
+        most 100) -- there is no per-transaction incremental filtering.
+        """
+        if next_page_token:
+            return dict(parse_qsl(next_page_token.query))
+
+        return {}
 
     def post_process(self, row, context=None):
         """Attach order context to each transaction."""
